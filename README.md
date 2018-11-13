@@ -38,7 +38,7 @@ Predict label for new feature:
     feature - new feature for prediction, required
     k - number of nearest neighbors, optional, default - 3
     algorithm - algorithm for calculation of distances, one of the [brute], optional, default - "brute"
-    weight - method of weighted neighbors, one of the [uniform|distance], optional, default = "uniform"
+    weight - method of weighted neighbors, one of the [uniform|distance], optional, default - "uniform"
 
 ## Contributing
 

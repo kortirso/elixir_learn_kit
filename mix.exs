@@ -35,7 +35,7 @@ defmodule LearnKit.MixProject do
     [
       maintainers: ["Anton Bogdanov"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/kortirso/elixir_learn_kits"}
+      links: %{"GitHub" => "https://github.com/kortirso/elixir_learn_kit"}
     ]
   end
 end
