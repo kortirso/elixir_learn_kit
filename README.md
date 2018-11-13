@@ -10,10 +10,35 @@ by adding `learn_kit` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:learn_kit, "~> 0.0.1"}
+    {:learn_kit, "~> 0.0.9"}
   ]
 end
 ```
+
+### K-Nearest Neighbors
+
+Initialize classificator with data set consists from labels and features:
+
+```elixir
+  classificator = LearnKit.Knn.new
+                  |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
+                  |> LearnKit.Knn.add_train_data({:a1, [-2, -1]})
+                  |> LearnKit.Knn.add_train_data({:a1, [-3, -2]})
+                  |> LearnKit.Knn.add_train_data({:a2, [1, 1]})
+                  |> LearnKit.Knn.add_train_data({:a2, [2, 1]})
+                  |> LearnKit.Knn.add_train_data({:a2, [3, 2]})
+                  |> LearnKit.Knn.add_train_data({:a2, [-2, -2]})
+```
+
+Predict label for new feature:
+
+```elixir
+  LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+```
+    feature - new feature for prediction, required
+    k - number of nearest neighbors, optional, default - 3
+    algorithm - algorithm for calculation of distances, one of the [brute], optional, default - "brute"
+    weight - method of weighted neighbors, one of the [uniform|distance], optional, default = "uniform"
 
 ## Contributing
 

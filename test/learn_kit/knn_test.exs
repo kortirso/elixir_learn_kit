@@ -17,4 +17,17 @@ defmodule LearnKit.KnnTest do
 
     assert data_set == [b1: [[2, 3]], a1: [[1, 3], [1, 2]]]
   end
+
+  test "classify new feature" do
+    classificator = LearnKit.Knn.new
+                    |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
+                    |> LearnKit.Knn.add_train_data({:a1, [-2, -1]})
+                    |> LearnKit.Knn.add_train_data({:a1, [-3, -2]})
+                    |> LearnKit.Knn.add_train_data({:a2, [1, 1]})
+                    |> LearnKit.Knn.add_train_data({:a2, [2, 1]})
+                    |> LearnKit.Knn.add_train_data({:a2, [3, 2]})
+                    |> LearnKit.Knn.add_train_data({:a2, [-2, -2]})
+
+    assert {:ok, "Feature has label a1 with weight 1.5"} = LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+  end
 end

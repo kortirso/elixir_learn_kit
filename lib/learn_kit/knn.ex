@@ -34,14 +34,14 @@ defmodule LearnKit.Knn do
   end
 
   @doc """
-  Predict label of the feature
+  Classify label of the new feature
   Available options:
-  feature - feature for prediction, required, example: [1, 2, 3]
+  feature - feature for classification, required, example: [1, 2, 3]
   k - number of nearest neighbours, default is 3, optional
   algorithm - brute, optional
   weight - uniform/distance, default is uniform, optional
   """
-  def predict(%Knn{data_set: data_set}, options \\ []) do
+  def classify(%Knn{data_set: data_set}, options \\ []) do
     try do
       unless Keyword.has_key?(options, :feature) do
         raise "Feature option is required"
@@ -49,7 +49,7 @@ defmodule LearnKit.Knn do
       # modification of options
       options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
       # prediction
-      [{label, weight}] = prediction(data_set, options)
+      {label, weight} = prediction(data_set, options)
       {:ok, "Feature has label #{label} with weight #{weight}"}
     rescue
       error -> {:error, error.message}

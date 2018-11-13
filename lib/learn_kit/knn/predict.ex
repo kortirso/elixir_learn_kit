@@ -47,7 +47,7 @@ defmodule LearnKit.Knn.Predict do
       defp sort_result(features) do
         features
         |> Enum.sort(&(elem(&1, 1) >= elem(&2, 1)))
-        |> Enum.take(1)
+        |> List.first
       end
 
       # brute algorithm for prediction
