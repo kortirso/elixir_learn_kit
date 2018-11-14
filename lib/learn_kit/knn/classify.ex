@@ -1,8 +1,7 @@
-defmodule LearnKit.Knn.Predict do
+defmodule LearnKit.Knn.Classify do
   @moduledoc """
   Module for knn prediction functions
   """
-
   defmacro __using__(_opts) do
     quote do
       defp prediction(data_set, options) do
@@ -52,23 +51,42 @@ defmodule LearnKit.Knn.Predict do
 
       # brute algorithm for prediction
       defp brute_algorithm(data_set, options) do
-        Keyword.keys(data_set)
-        |> Enum.map(fn key ->
-          Keyword.get(data_set, key)
-          |> Enum.reduce([], fn feature, acc ->
-            distance = feature |> calc_distance_between_features(Keyword.get(options, :feature))
-            if distance == 0 do
-              raise "Feature exists in train data set with label #{key}"
-            end
-            acc = [{distance, key} | acc]
-          end)
-        end)
+        data_set
+        |> Keyword.keys
+        |> handle_features_in_label(data_set, Keyword.get(options, :feature))
         |> List.flatten
       end
 
+      defp handle_features_in_label(keys, data_set, current_feature) do
+        keys
+        |> Enum.map(fn key ->
+          data_set
+          |> Keyword.get(key)
+          |> filter_features_by_size(current_feature)
+          |> calc_distances_in_label(current_feature, key)
+        end)
+      end
+
+      defp filter_features_by_size(features, current_feature) do
+        features
+        |> Enum.filter(fn feature ->
+          length(feature) == length(current_feature)
+        end)
+      end
+
+      defp calc_distances_in_label(features, current_feature, key) do
+        features
+        |> Enum.reduce([], fn feature, acc ->
+          distance = feature |> calc_distance_between_features(current_feature)
+          if distance == 0 do
+            raise "Feature exists in train data set with label #{key}"
+          end
+          acc = [{distance, key} | acc]
+        end)
+      end
+
       defp calc_distance_between_features(feature_from_data_set, feature) do
-        size = length(feature_from_data_set)
-        calc_distance_between_points(0, feature_from_data_set, feature, 0, size - 1)
+        calc_distance_between_points(0, feature_from_data_set, feature, 0, length(feature_from_data_set) - 1)
       end
 
       defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do

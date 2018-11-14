@@ -7,7 +7,7 @@ defmodule LearnKit.Knn do
 
   alias LearnKit.{Knn}
 
-  use Knn.Predict
+  use Knn.Classify
 
   @doc """
   Creates classificator with empty data_set
