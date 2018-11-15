@@ -15,7 +15,7 @@ def deps do
 end
 ```
 
-### K-Nearest Neighbors
+### K-Nearest Neighbours
 
 Initialize classificator with data set consists from labels and features:
 

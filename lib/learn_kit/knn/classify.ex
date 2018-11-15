@@ -1,6 +1,6 @@
 defmodule LearnKit.Knn.Classify do
   @moduledoc """
-  Module for knn prediction functions
+  Module for knn classify functions
   """
   defmacro __using__(_opts) do
     quote do
@@ -113,7 +113,7 @@ defmodule LearnKit.Knn.Classify do
         end
       end
 
-      defp accumulate_weight_of_labels(features, acc) when features == [] do
+      defp accumulate_weight_of_labels([], acc) do
         acc
       end
 
