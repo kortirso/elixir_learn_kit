@@ -2,6 +2,10 @@
 
 Elixir package for machine learning
 
+Available algorithms:
+
+- K-Nearest Neighbours
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
@@ -10,7 +14,7 @@ by adding `learn_kit` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:learn_kit, "~> 0.0.9"}
+    {:learn_kit, "~> 0.1.0"}
   ]
 end
 ```
