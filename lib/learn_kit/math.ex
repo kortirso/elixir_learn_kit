@@ -3,6 +3,9 @@ defmodule LearnKit.Math do
   Math module
   """
 
+  @type row :: [number]
+  @type matrix :: [row]
+
   @doc """
   Calculate the mean from a list of numbers
 
@@ -105,5 +108,28 @@ defmodule LearnKit.Math do
   def standard_deviation_from_variance(list_variance) do
     list_variance
     |> :math.sqrt
+  end
+
+  @doc """
+  Transposing a matrix
+
+  ## Examples
+
+      iex> LearnKit.Math.transpose([[1, 2], [3, 4], [5, 6]])
+      [[1, 3, 5], [2, 4, 6]]
+
+  """
+  @spec transpose(matrix) :: matrix
+
+  def transpose(m) do
+    swap_rows_cols(m)
+  end
+
+  defp swap_rows_cols([head | _]) when head == [], do: []
+
+  defp swap_rows_cols(rows) do
+    firsts = Enum.map(rows, fn(x) -> hd(x) end)
+    others = Enum.map(rows, fn(x) -> tl(x) end)
+    [firsts | swap_rows_cols(others)]
   end
 end
