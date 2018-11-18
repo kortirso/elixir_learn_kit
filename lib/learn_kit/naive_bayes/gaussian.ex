@@ -9,6 +9,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   use Gaussian.Fit
   use Gaussian.Classify
+  use Gaussian.Score
 
   @type label :: atom
   @type feature :: [integer]
@@ -144,5 +145,27 @@ defmodule LearnKit.NaiveBayes.Gaussian do
     |> classify_data(feature)
     |> Enum.sort_by(&(elem(&1, 1)))
     |> Enum.at(-1)
+  end
+
+  @doc """
+  Returns the mean accuracy on the given test data and labels
+
+  ## Parameters
+
+    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+
+  ## Examples
+
+      iex> classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
+      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+      iex> classificator |> LearnKit.NaiveBayes.Gaussian.score
+      0.857143
+
+  """
+  @spec score(%LearnKit.NaiveBayes.Gaussian{data_set: data_set, fit_data: fit_data}) :: number
+
+  def score(%Gaussian{data_set: data_set, fit_data: fit_data}) do
+    fit_data
+    |> calc_score(data_set)
   end
 end
