@@ -8,6 +8,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   alias LearnKit.NaiveBayes.Gaussian
 
   use Gaussian.Fit
+  use Gaussian.Classify
 
   @type label :: atom
   @type feature :: [integer]
@@ -100,5 +101,24 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   def fit(%Gaussian{data_set: data_set}) do
     %Gaussian{data_set: data_set, fit_data: fit_data(data_set)}
+  end
+
+  @doc """
+  Return probability estimates for the feature
+
+  ## Parameters
+
+    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+
+  ## Examples
+
+      iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
+
+  """
+  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: []
+
+  def predict_proba(%Gaussian{fit_data: fit_data}, feature) do
+    fit_data
+    |> classify_data(feature)
   end
 end
