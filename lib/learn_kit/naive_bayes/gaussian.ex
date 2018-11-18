@@ -12,6 +12,8 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   @type label :: atom
   @type feature :: [integer]
+  @type prediction :: {label, number}
+  @type predictions :: [prediction]
   @type point :: {label, feature}
   @type features :: [feature]
   @type data_set :: [{label, features}]
@@ -113,12 +115,34 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   ## Examples
 
       iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
+      [a1: 0.0359, a2: 0.0039]
 
   """
-  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: []
+  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: predictions
 
   def predict_proba(%Gaussian{fit_data: fit_data}, feature) do
     fit_data
     |> classify_data(feature)
+  end
+
+  @doc """
+  Return exact prediction for the feature
+
+  ## Parameters
+
+    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+
+  ## Examples
+
+      iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+
+  """
+  @spec predict(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: prediction
+
+  def predict(%Gaussian{fit_data: fit_data}, feature) do
+    fit_data
+    |> classify_data(feature)
+    |> Enum.sort_by(&(elem(&1, 1)))
+    |> Enum.at(-1)
   end
 end
