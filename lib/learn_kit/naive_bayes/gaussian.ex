@@ -116,14 +116,14 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   ## Examples
 
       iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
-      [a1: 0.0359, a2: 0.0039]
+      {:ok, [a1: 0.0359, a2: 0.0039]}
 
   """
-  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: predictions
+  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: {:ok, predictions}
 
   def predict_proba(%Gaussian{fit_data: fit_data}, feature) do
-    fit_data
-    |> classify_data(feature)
+    result = fit_data |> classify_data(feature)
+    {:ok, result}
   end
 
   @doc """
@@ -136,15 +136,14 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   ## Examples
 
       iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+      {:ok, {:a1, 0.334545454}}
 
   """
-  @spec predict(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: prediction
+  @spec predict(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: {:ok, prediction}
 
   def predict(%Gaussian{fit_data: fit_data}, feature) do
-    fit_data
-    |> classify_data(feature)
-    |> Enum.sort_by(&(elem(&1, 1)))
-    |> Enum.at(-1)
+    result = fit_data |> classify_data(feature) |> Enum.sort_by(&(elem(&1, 1))) |> Enum.at(-1)
+    {:ok, result}
   end
 
   @doc """
@@ -159,13 +158,13 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       iex> classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
       iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
       iex> classificator |> LearnKit.NaiveBayes.Gaussian.score
-      0.857143
+      {:ok, 0.857143}
 
   """
-  @spec score(%LearnKit.NaiveBayes.Gaussian{data_set: data_set, fit_data: fit_data}) :: number
+  @spec score(%LearnKit.NaiveBayes.Gaussian{data_set: data_set, fit_data: fit_data}) :: {:ok, number}
 
   def score(%Gaussian{data_set: data_set, fit_data: fit_data}) do
-    fit_data
-    |> calc_score(data_set)
+    result = fit_data |> calc_score(data_set)
+    {:ok, result}
   end
 end

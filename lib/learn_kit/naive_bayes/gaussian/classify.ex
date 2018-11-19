@@ -19,6 +19,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
         class_fraction = 1.0 / labels_count
         feature_bayes = feature_mult(feature, fit_results, 1.0, 0)
         feature_bayes * class_fraction
+        |> Float.round(10)
       end
 
       # multiply together the feature probabilities for all of the features in a label for given values

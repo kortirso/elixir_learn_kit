@@ -90,10 +90,10 @@ defmodule LearnKit.Knn do
   ## Examples
 
       iex> classificator |> LearnKit.Knn.classify([feature: [-1, -2], k: 3, weight: "distance"])
-      {:ok, "Feature has label a1 with weight 1.5"}
+      {:ok, :a1}
 
   """
-  @spec classify(%LearnKit.Knn{data_set: data_set}, [tuple]) :: {atom, String.t}
+  @spec classify(%LearnKit.Knn{data_set: data_set}, [tuple]) :: {:ok, label}
 
   def classify(%Knn{data_set: data_set}, options \\ []) do
     try do
@@ -103,8 +103,8 @@ defmodule LearnKit.Knn do
       # modification of options
       options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
       # prediction
-      {label, weight} = prediction(data_set, options)
-      {:ok, "Feature has label #{label} with weight #{weight}"}
+      {label, _} = prediction(data_set, options)
+      {:ok, label}
     rescue
       error -> {:error, error.message}
     end

@@ -28,6 +28,6 @@ defmodule LearnKit.KnnTest do
                     |> LearnKit.Knn.add_train_data({:a2, [3, 2]})
                     |> LearnKit.Knn.add_train_data({:a2, [-2, -2]})
 
-    assert {:ok, "Feature has label a1 with weight 1.5"} = LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+    assert {:ok, :a1} = LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
   end
 end

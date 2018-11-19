@@ -28,7 +28,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Score do
       end
 
       defp check_feature(feature, fit_data, label) do
-        {predicted_label, _} = Gaussian.predict(%Gaussian{fit_data: fit_data}, feature)
+        {:ok, {predicted_label, _}} = Gaussian.predict(%Gaussian{fit_data: fit_data}, feature)
         if predicted_label == label, do: 1, else: 0
       end
     end
