@@ -5,6 +5,7 @@ Elixir package for machine learning
 Available algorithms:
 
 - K-Nearest Neighbours
+- Gaussian Naive Bayes
 
 ## Installation
 
