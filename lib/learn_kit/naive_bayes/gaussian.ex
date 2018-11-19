@@ -155,8 +155,6 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Examples
 
-      iex> classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
-      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
       iex> classificator |> LearnKit.NaiveBayes.Gaussian.score
       {:ok, 0.857143}
 

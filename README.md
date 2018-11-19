@@ -19,7 +19,7 @@ def deps do
 end
 ```
 
-### K-Nearest Neighbours
+### K-Nearest Neighbours classification
 
 Initialize classificator with data set consists from labels and features:
 
@@ -27,11 +27,7 @@ Initialize classificator with data set consists from labels and features:
   classificator = LearnKit.Knn.new
                   |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
                   |> LearnKit.Knn.add_train_data({:a1, [-2, -1]})
-                  |> LearnKit.Knn.add_train_data({:a1, [-3, -2]})
                   |> LearnKit.Knn.add_train_data({:a2, [1, 1]})
-                  |> LearnKit.Knn.add_train_data({:a2, [2, 1]})
-                  |> LearnKit.Knn.add_train_data({:a2, [3, 2]})
-                  |> LearnKit.Knn.add_train_data({:a2, [-2, -2]})
 ```
 
 Predict label for new feature:
@@ -43,6 +39,43 @@ Predict label for new feature:
     k - number of nearest neighbors, optional, default - 3
     algorithm - algorithm for calculation of distances, one of the [brute], optional, default - "brute"
     weight - method of weighted neighbors, one of the [uniform|distance], optional, default - "uniform"
+
+### Gaussian Naive Bayes classification
+
+Initialize classificator with data set consists from labels and features:
+
+```elixir
+  classificator = LearnKit.NaiveBayes.Gaussian.new
+                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
+                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-2, -1]})
+                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a2, [1, 1]})
+```
+
+Fit data set
+
+```elixir
+  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+```
+
+Return probability estimates for the feature
+
+```elixir
+  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
+```
+    feature - new feature for prediction, required
+
+Return exact prediction for the feature
+
+```elixir
+  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+```
+    feature - new feature for prediction, required
+
+Returns the mean accuracy on the given test data and labels
+
+```elixir
+  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.score
+```
 
 ## Contributing
 
