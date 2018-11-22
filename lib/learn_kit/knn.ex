@@ -24,7 +24,7 @@ defmodule LearnKit.Knn do
       %LearnKit.Knn{data_set: []}
 
   """
-  @spec new() :: %LearnKit.Knn{data_set: []}
+  @spec new() :: %Knn{data_set: []}
 
   def new do
     []
@@ -44,7 +44,7 @@ defmodule LearnKit.Knn do
       %LearnKit.Knn{data_set: [a1: [[1, 2], [2, 3]], b1: [[-1, -2]]]}
 
   """
-  @spec new(data_set) :: %LearnKit.Knn{data_set: data_set}
+  @spec new(data_set) :: %Knn{data_set: data_set}
 
   def new(data_set) do
     %Knn{data_set: data_set}
@@ -60,11 +60,11 @@ defmodule LearnKit.Knn do
 
   ## Examples
 
-      iex> classificator |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
+      iex> classificator = classificator |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
       %LearnKit.Knn{data_set: [a1: [[-1, -1]]]}
 
   """
-  @spec add_train_data(%LearnKit.Knn{data_set: data_set}, point) :: %LearnKit.Knn{data_set: data_set}
+  @spec add_train_data(%Knn{data_set: data_set}, point) :: %Knn{data_set: data_set}
 
   def add_train_data(%Knn{data_set: data_set}, {key, value}) do
     features = if Keyword.has_key?(data_set, key), do: Keyword.get(data_set, key), else: []
@@ -93,7 +93,7 @@ defmodule LearnKit.Knn do
       {:ok, :a1}
 
   """
-  @spec classify(%LearnKit.Knn{data_set: data_set}, [tuple]) :: {:ok, label}
+  @spec classify(%Knn{data_set: data_set}, [tuple]) :: {:ok, label}
 
   def classify(%Knn{data_set: data_set}, options \\ []) do
     try do

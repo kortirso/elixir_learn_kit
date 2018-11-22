@@ -23,7 +23,7 @@ defmodule LearnKit.Regression.Linear do
       %LearnKit.Regression.Linear{factors: [], results: [], coefficients: []}
 
   """
-  @spec new() :: %LearnKit.Regression.Linear{factors: [], results: [], coefficients: []}
+  @spec new() :: %Linear{factors: [], results: [], coefficients: []}
 
   def new do
     Linear.new([], [])
@@ -43,7 +43,7 @@ defmodule LearnKit.Regression.Linear do
       %LearnKit.Regression.Linear{factors: [1, 2, 3, 4], results: [3, 6, 10, 15], coefficients: []}
 
   """
-  @spec new(factors, results) :: %LearnKit.Regression.Linear{factors: factors, results: results, coefficients: []}
+  @spec new(factors, results) :: %Linear{factors: factors, results: results, coefficients: []}
 
   def new(factors, results) do
     %Linear{factors: factors, results: results}
@@ -66,7 +66,7 @@ defmodule LearnKit.Regression.Linear do
       }
 
   """
-  @spec fit(%LearnKit.Regression.Linear{factors: factors, results: results}) :: %LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}
+  @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
 
   def fit(%Linear{factors: factors, results: results}) do
     %Linear{factors: factors, results: results, coefficients: fit_data(factors, results)}
@@ -86,7 +86,7 @@ defmodule LearnKit.Regression.Linear do
       {:ok, [14.5, 30.5, 50.5]}
 
   """
-  @spec predict(%LearnKit.Regression.Linear{coefficients: coefficients}, list) :: {:ok, list}
+  @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
   def predict(%Linear{coefficients: coefficients}, samples) do
     result = samples |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
@@ -106,7 +106,7 @@ defmodule LearnKit.Regression.Linear do
       {:ok, 0.9876543209876543}
 
   """
-  @spec score(%LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
+  @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
 
   def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
     {:ok, calculate_score(coefficients, factors, results)}

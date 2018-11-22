@@ -31,7 +31,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       %LearnKit.NaiveBayes.Gaussian{data_set: [], fit_data: []}
 
   """
-  @spec new() :: %LearnKit.NaiveBayes.Gaussian{data_set: []}
+  @spec new() :: %Gaussian{data_set: []}
 
   def new do
     []
@@ -51,7 +51,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       %LearnKit.NaiveBayes.Gaussian{data_set: [a1: [[1, 2], [2, 3]], b1: [[-1, -2]]], fit_data: []}
 
   """
-  @spec new(data_set) :: %LearnKit.NaiveBayes.Gaussian{data_set: data_set}
+  @spec new(data_set) :: %Gaussian{data_set: data_set}
 
   def new(data_set) do
     %Gaussian{data_set: data_set}
@@ -67,11 +67,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Examples
 
-      iex> classificator |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
+      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
       %LearnKit.NaiveBayes.Gaussian{data_set: [a1: [[-1, -1]]], fit_data: []}
 
   """
-  @spec add_train_data(%LearnKit.NaiveBayes.Gaussian{data_set: data_set}, point) :: %LearnKit.NaiveBayes.Gaussian{data_set: data_set}
+  @spec add_train_data(%Gaussian{data_set: data_set}, point) :: %Gaussian{data_set: data_set}
 
   def add_train_data(%Gaussian{data_set: data_set}, {key, value}) do
     features = if Keyword.has_key?(data_set, key), do: Keyword.get(data_set, key), else: []
@@ -88,7 +88,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Examples
 
-      iex> classificator |> LearnKit.NaiveBayes.Gaussian.fit
+      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
       %LearnKit.NaiveBayes.Gaussian{
         data_set: [a1: [[-1, -1]]],
         fit_data: [
@@ -100,7 +100,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       }
 
   """
-  @spec fit(%LearnKit.NaiveBayes.Gaussian{data_set: data_set}) :: %LearnKit.NaiveBayes.Gaussian{data_set: data_set, fit_data: fit_data}
+  @spec fit(%Gaussian{data_set: data_set}) :: %Gaussian{data_set: data_set, fit_data: fit_data}
 
   def fit(%Gaussian{data_set: data_set}) do
     %Gaussian{data_set: data_set, fit_data: fit_data(data_set)}
@@ -119,7 +119,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       {:ok, [a1: 0.0359, a2: 0.0039]}
 
   """
-  @spec predict_proba(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: {:ok, predictions}
+  @spec predict_proba(%Gaussian{fit_data: fit_data}, feature) :: {:ok, predictions}
 
   def predict_proba(%Gaussian{fit_data: fit_data}, feature) do
     result = fit_data |> classify_data(feature)
@@ -139,7 +139,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       {:ok, {:a1, 0.334545454}}
 
   """
-  @spec predict(%LearnKit.NaiveBayes.Gaussian{fit_data: fit_data}, feature) :: {:ok, prediction}
+  @spec predict(%Gaussian{fit_data: fit_data}, feature) :: {:ok, prediction}
 
   def predict(%Gaussian{fit_data: fit_data}, feature) do
     result = fit_data |> classify_data(feature) |> Enum.sort_by(&(elem(&1, 1))) |> Enum.at(-1)
@@ -159,7 +159,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
       {:ok, 0.857143}
 
   """
-  @spec score(%LearnKit.NaiveBayes.Gaussian{data_set: data_set, fit_data: fit_data}) :: {:ok, number}
+  @spec score(%Gaussian{data_set: data_set, fit_data: fit_data}) :: {:ok, number}
 
   def score(%Gaussian{data_set: data_set, fit_data: fit_data}) do
     result = fit_data |> calc_score(data_set)

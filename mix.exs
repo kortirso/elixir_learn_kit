@@ -8,7 +8,7 @@ defmodule LearnKit.MixProject do
   def project do
     [
       app: :learn_kit,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.7",
       name: "LearnKit",
       description: @description,
