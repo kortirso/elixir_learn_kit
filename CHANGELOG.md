@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - CHANGELOG.md file
+- Add simple Linear Regression predictor
 
 ## [0.1.1] - 2018-11-19
 ### Added
