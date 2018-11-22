@@ -2,7 +2,11 @@
 
 Elixir package for machine learning
 
-Available algorithms:
+Available algorithms for prediction:
+
+- Linear Regression
+
+Available algorithms for classification:
 
 - K-Nearest Neighbours
 - Gaussian Naive Bayes
@@ -20,21 +24,50 @@ def deps do
 end
 ```
 
+### Linear Regression
+
+Initialize predictor with data:
+
+```elixir
+  alias LearnKit.Regression.Linear
+  predictor = Linear.new([1, 2, 3, 4], [3, 6, 10, 15])
+```
+
+Fit data set:
+
+```elixir
+  predictor = predictor |> Linear.fit
+```
+
+Predict using the linear model:
+
+```elixir
+  predictor |> Linear.predict([4, 8, 13])
+```
+    samples - array of variables, required
+
+Returns the coefficient of determination R^2 of the prediction:
+
+```elixir
+  predictor |> Linear.score
+```
+
 ### K-Nearest Neighbours classification
 
 Initialize classificator with data set consists from labels and features:
 
 ```elixir
-  classificator = LearnKit.Knn.new
-                  |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
-                  |> LearnKit.Knn.add_train_data({:a1, [-2, -1]})
-                  |> LearnKit.Knn.add_train_data({:a2, [1, 1]})
+  alias LearnKit.Knn
+  classificator = Knn.new
+                  |> Knn.add_train_data({:a1, [-1, -1]})
+                  |> Knn.add_train_data({:a1, [-2, -1]})
+                  |> Knn.add_train_data({:a2, [1, 1]})
 ```
 
 Predict label for new feature:
 
 ```elixir
-  LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+  Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
 ```
     feature - new feature for prediction, required
     k - number of nearest neighbors, optional, default - 3
@@ -46,36 +79,37 @@ Predict label for new feature:
 Initialize classificator with data set consists from labels and features:
 
 ```elixir
-  classificator = LearnKit.NaiveBayes.Gaussian.new
-                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
-                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-2, -1]})
-                  |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a2, [1, 1]})
+  alias LearnKit.NaiveBayes.Gaussian
+  classificator = Gaussian.new
+                  |> Gaussian.add_train_data({:a1, [-1, -1]})
+                  |> Gaussian.add_train_data({:a1, [-2, -1]})
+                  |> Gaussian.add_train_data({:a2, [1, 1]})
 ```
 
-Fit data set
+Fit data set:
 
 ```elixir
-  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+  classificator = classificator |> Gaussian.fit
 ```
 
-Return probability estimates for the feature
+Return probability estimates for the feature:
 
 ```elixir
-  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
-```
-    feature - new feature for prediction, required
-
-Return exact prediction for the feature
-
-```elixir
-  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+  classificator |> Gaussian.predict_proba([1, 2])
 ```
     feature - new feature for prediction, required
 
-Returns the mean accuracy on the given test data and labels
+Return exact prediction for the feature:
 
 ```elixir
-  classificator = classificator |> LearnKit.NaiveBayes.Gaussian.score
+  classificator |> Gaussian.predict([1, 2])
+```
+    feature - new feature for prediction, required
+
+Returns the mean accuracy on the given test data and labels:
+
+```elixir
+  classificator |> Gaussian.score
 ```
 
 ## Contributing
