@@ -65,10 +65,7 @@ defmodule LearnKit.Math do
 
   def variance(list, list_mean) when is_list(list) do
     list
-    |> Enum.map(fn x ->
-      list_mean - x
-      |> :math.pow(2)
-    end)
+    |> Enum.map(fn x -> pow(list_mean - x, 2) end)
     |> mean
   end
 
@@ -131,5 +128,85 @@ defmodule LearnKit.Math do
     firsts = Enum.map(rows, fn(x) -> hd(x) end)
     others = Enum.map(rows, fn(x) -> tl(x) end)
     [firsts | swap_rows_cols(others)]
+  end
+
+  @doc """
+  Division for 2 elements
+
+  ## Examples
+
+      iex> LearnKit.Math.division(10, 2)
+      5
+
+  """
+  @spec division(number, number) :: number
+
+  def division(x, y) when y != 0 do
+    x / y
+  end
+
+  @doc """
+  Pow number
+
+  ## Examples
+
+      iex> LearnKit.Math.pow(10, 2)
+      100
+
+  """
+  @spec pow(number, number) :: number
+
+  def pow(x, y) do
+    :math.pow(x, y)
+  end
+
+  @doc """
+  Calculate the covariance of two lists
+
+  ## Examples
+
+      iex> LearnKit.Math.covariance([1, 2, 3], [14, 17, 25])
+      5.5
+
+  """
+  @spec covariance(list,list) :: number
+
+  def covariance(x, y) when length(x) == length(y) do
+    mean_x = mean(x)
+    mean_y = mean(y)
+    size = length(x)
+
+    Enum.zip(x, y)
+    |> Enum.map(fn {xi, yi} -> (xi - mean_x) * (yi - mean_y) end)
+    |> Enum.sum
+    |> division(size - 1)
+  end
+
+  @doc """
+  Correlation of two lists
+
+  ## Examples
+
+      iex> LearnKit.Math.correlation([1, 2, 3], [14, 17, 25])
+      0.9672471299049061
+
+  """
+  @spec correlation(list, list) :: number
+
+  def correlation(x, y) when length(x) == length(y) do
+    mean_x = mean(x)
+    mean_y = mean(y)
+
+    divider = Enum.zip(x, y)
+            |> Enum.map(fn {xi, yi} -> (xi - mean_x) * (yi - mean_y) end)
+            |> Enum.sum
+    denom_x = x
+              |> Enum.map(fn xi -> pow(xi - mean_x, 2) end)
+              |> Enum.sum
+    denom_y = y
+              |> Enum.map(fn yi -> pow(yi - mean_y, 2) end)
+              |> Enum.sum
+
+    divider / :math.sqrt(denom_x * denom_y)
   end
 end
