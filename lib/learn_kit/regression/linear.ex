@@ -87,9 +87,9 @@ defmodule LearnKit.Regression.Linear do
   end
 
   defp define_method_for_fit(options) do
-    cond do
-      Keyword.get(options, :method) == "gradient descent" -> "gradient descent"
-      true -> ""
+    case Keyword.get(options, :method) do
+      "gradient descent" -> "gradient descent"
+      _ -> ""
     end
   end
 

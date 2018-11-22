@@ -30,14 +30,12 @@ defmodule LearnKit.Regression.Linear.Calculations do
       defp total_sum_of_squares(list) do
         mean_list = Math.mean(list)
         list
-        |> Enum.map(fn x -> :math.pow(x - mean_list, 2) end)
-        |> Enum.sum
+        |> Enum.reduce(0, fn x, acc -> acc + :math.pow(x - mean_list, 2) end)
       end
 
       defp sum_of_squared_errors(coefficients, factors, results) do
         Enum.zip(factors, results)
-        |> Enum.map(fn {xi, yi} -> squared_prediction_error(coefficients, xi, yi) end)
-        |> Enum.sum
+        |> Enum.reduce(0, fn {xi, yi}, acc -> acc + squared_prediction_error(coefficients, xi, yi) end)
       end
 
       defp squared_prediction_error(coefficients, x, y) do
@@ -78,9 +76,7 @@ defmodule LearnKit.Regression.Linear.Calculations do
       end
 
       defp check_value(data, min_value, theta, min_theta, iterations_with_no_improvement, alpha) do
-        value = data
-                |> Enum.map(fn {xi, yi} -> squared_prediction_error(theta, xi, yi) end)
-                |> Enum.sum
+        value = data |> Enum.reduce(0, fn {xi, yi}, acc -> acc + squared_prediction_error(theta, xi, yi) end)
         cond do
           value < min_value ->
             [theta, value, 0, 0.0001]

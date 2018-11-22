@@ -3,6 +3,10 @@ defmodule LearnKit.MathTest do
 
   alias LearnKit.Math
 
+  test "calculate sum" do
+    assert 3 = Math.summ(1, 2)
+  end
+
   test "calculate mean" do
     assert 2.0 = Math.mean([1, 2, 3])
   end
@@ -33,5 +37,17 @@ defmodule LearnKit.MathTest do
 
   test "calculate correlation" do
     assert 0.9672471299049061 = Math.correlation([1, 2, 3], [14, 17, 25])
+  end
+
+  test "transposing a matrix" do
+    assert [[1, 3, 5], [2, 4, 6]] = Math.transpose([[1, 2], [3, 4], [5, 6]])
+  end
+
+  test "scalar multiplication with matrix" do
+    assert [50, 60] = Math.scalar_multiply(10, [5, 6])
+  end
+
+  test "vector subtraction" do
+    assert [5, 45, 20] = Math.vector_subtraction([40, 50, 60], [35, 5, 40])
   end
 end
