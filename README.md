@@ -19,7 +19,7 @@ by adding `learn_kit` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:learn_kit, "~> 0.1.2"}
+    {:learn_kit, "~> 0.1.3"}
   ]
 end
 ```
