@@ -2,6 +2,9 @@ defmodule LearnKit.Knn.Classify do
   @moduledoc """
   Module for knn classify functions
   """
+
+  alias LearnKit.Math
+
   defmacro __using__(_opts) do
     quote do
       defp prediction(data_set, options) do
@@ -34,7 +37,8 @@ defmodule LearnKit.Knn.Classify do
       defp calc_feature_weights(features, options) do
         features
         |> Enum.map(fn feature ->
-          Tuple.append(feature, calc_feature_weight(Keyword.get(options, :weight), elem(feature, 0)))
+          feature
+          |> Tuple.append(calc_feature_weight(Keyword.get(options, :weight), elem(feature, 0)))
         end)
       end
 
@@ -78,9 +82,7 @@ defmodule LearnKit.Knn.Classify do
         features
         |> Enum.reduce([], fn feature, acc ->
           distance = feature |> calc_distance_between_features(current_feature)
-          if distance == 0 do
-            raise "Feature exists in train data set with label #{key}"
-          end
+          if distance == 0, do: raise "Feature exists in train data set with label #{key}"
           acc = [{distance, key} | acc]
         end)
       end
@@ -92,17 +94,13 @@ defmodule LearnKit.Knn.Classify do
       defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do
         Enum.at(feature_from_data_set, current_index) - Enum.at(feature, current_index)
         |> :math.pow(2)
-        |> summ(acc)
+        |> Math.summ(acc)
         |> calc_distance_between_points(feature_from_data_set, feature, current_index + 1, size)
       end
 
-      defp calc_distance_between_points(acc, _feature_from_data_set, _feature, _current_index, _size) do
+      defp calc_distance_between_points(acc, _, _, _, _) do
         acc
         |> :math.sqrt
-      end
-
-      defp summ(a, b) do
-        a + b
       end
 
       defp calc_feature_weight(weight, distance) do
@@ -117,7 +115,7 @@ defmodule LearnKit.Knn.Classify do
         acc
       end
 
-      defp accumulate_weight_of_labels([{_distance, key, weight} | tail], acc) do
+      defp accumulate_weight_of_labels([{_, key, weight} | tail], acc) do
         previous = if Keyword.has_key?(acc, key), do: Keyword.get(acc, key), else: 0
         acc = Keyword.put(acc, key, previous + weight)
         accumulate_weight_of_labels(tail, acc)

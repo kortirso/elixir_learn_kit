@@ -33,10 +33,16 @@ Initialize predictor with data:
   predictor = Linear.new([1, 2, 3, 4], [3, 6, 10, 15])
 ```
 
-Fit data set:
+Fit data set with least squares method:
 
 ```elixir
   predictor = predictor |> Linear.fit
+```
+
+Fit data set with gradient descent method:
+
+```elixir
+  predictor = predictor |> Linear.fit([method: "gradient descent"])
 ```
 
 Predict using the linear model:

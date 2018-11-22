@@ -7,7 +7,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
       # classify data
       # returns data like [label1: 0.03592747361085857, label2: 0.00399309643713954]
       defp classify_data(fit_data, feature) do
-        labels_count = length(Keyword.keys(fit_data))
+        labels_count = fit_data |> Keyword.keys |> length
         fit_data
         |> Enum.map(fn {label, fit_results} ->
           {label, class_probability(labels_count, feature, fit_results)}
@@ -23,7 +23,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
       end
 
       # multiply together the feature probabilities for all of the features in a label for given values
-      defp feature_mult([], _fit_results, acc, _index), do: acc
+      defp feature_mult([], _, acc, _), do: acc
 
       defp feature_mult([head | tail], fit_results, acc, index) do
         acc = acc * feature_probability(index, head, fit_results)
@@ -38,7 +38,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
           if fit_result.mean == value, do: 1.0, else: 0.0
         else
         # calculate the gaussian probability
-          exp = - :math.pow((value - fit_result.mean), 2) / (2 * fit_result.variance)
+          exp = - :math.pow(value - fit_result.mean, 2) / (2 * fit_result.variance)
           :math.exp(exp) / :math.sqrt(2 * :math.pi * fit_result.variance)
         end
       end

@@ -97,9 +97,7 @@ defmodule LearnKit.Knn do
 
   def classify(%Knn{data_set: data_set}, options \\ []) do
     try do
-      unless Keyword.has_key?(options, :feature) do
-        raise "Feature option is required"
-      end
+      unless Keyword.has_key?(options, :feature), do: raise "Feature option is required"
       # modification of options
       options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
       # prediction

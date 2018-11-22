@@ -7,8 +7,7 @@ defmodule LearnKit.Regression.Linear do
 
   alias LearnKit.Regression.Linear
 
-  use Linear.Fit
-  use Linear.Predict
+  use Linear.Calculations
 
   @type factors :: [number]
   @type results :: [number]
@@ -55,6 +54,11 @@ defmodule LearnKit.Regression.Linear do
   ## Parameters
 
     - predictor: %LearnKit.Regression.Linear{}
+    - options: keyword list with options
+
+  ## Options
+
+    - method: method for fit, "least squares"/"gradient descent", default is "least squares", optional
 
   ## Examples
 
@@ -65,11 +69,28 @@ defmodule LearnKit.Regression.Linear do
         results: [3, 6, 10, 15]
       }
 
+      iex> predictor = predictor |> LearnKit.Regression.Linear.fit([method: "gradient descent"])
+      %LearnKit.Regression.Linear{
+        coefficients: [-1.4975720508482548, 3.9992148848913356],
+        factors: [1, 2, 3, 4],
+        results: [3, 6, 10, 15]
+      }
+
   """
   @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
 
-  def fit(%Linear{factors: factors, results: results}) do
-    %Linear{factors: factors, results: results, coefficients: fit_data(factors, results)}
+  def fit(%Linear{factors: factors, results: results}, options \\ []) do
+    coefficients = Keyword.merge([method: ""], options)
+                    |> define_method_for_fit
+                    |> fit_data(factors, results)
+    %Linear{factors: factors, results: results, coefficients: coefficients}
+  end
+
+  defp define_method_for_fit(options) do
+    case Keyword.get(options, :method) do
+      "gradient descent" -> "gradient descent"
+      _ -> ""
+    end
   end
 
   @doc """

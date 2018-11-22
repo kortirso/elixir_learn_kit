@@ -7,6 +7,21 @@ defmodule LearnKit.Math do
   @type matrix :: [row]
 
   @doc """
+  Sum of 2 numbers
+
+  ## Examples
+
+      iex> LearnKit.Math.summ(1, 2)
+      3
+
+  """
+  @spec summ(number, number) :: number
+
+  def summ(a, b) do
+    a + b
+  end
+
+  @doc """
   Calculate the mean from a list of numbers
 
   ## Examples
@@ -125,9 +140,41 @@ defmodule LearnKit.Math do
   defp swap_rows_cols([head | _]) when head == [], do: []
 
   defp swap_rows_cols(rows) do
-    firsts = Enum.map(rows, fn(x) -> hd(x) end)
-    others = Enum.map(rows, fn(x) -> tl(x) end)
+    firsts = Enum.map(rows, fn x -> hd(x) end)
+    others = Enum.map(rows, fn x -> tl(x) end)
     [firsts | swap_rows_cols(others)]
+  end
+
+  @doc """
+  Scalar multiplication
+
+  ## Examples
+
+      iex> LearnKit.Math.scalar_multiply(10, [5, 6])
+      [50, 60]
+
+  """
+  @spec scalar_multiply(integer, list) :: list
+
+  def scalar_multiply(multiplicator, list) when is_list(list) do
+    list
+    |> Enum.map(fn x -> x * multiplicator end)
+  end
+
+  @doc """
+  Vector subtraction
+
+  ## Examples
+
+      iex> LearnKit.Math.vector_subtraction([40, 50, 60], [35, 5, 40])
+      [5, 45, 20]
+
+  """
+  @spec vector_subtraction(list, list) :: list
+
+  def vector_subtraction(x, y) when is_list(x) and is_list(y) and length(x) == length(y) do
+    Enum.zip(x, y)
+    |> Enum.map(fn {xi, yi} -> xi - yi end)
   end
 
   @doc """
@@ -162,8 +209,7 @@ defmodule LearnKit.Math do
     size = length(x)
 
     Enum.zip(x, y)
-    |> Enum.map(fn {xi, yi} -> (xi - mean_x) * (yi - mean_y) end)
-    |> Enum.sum
+    |> Enum.reduce(0, fn {xi, yi}, acc -> acc + (xi - mean_x) * (yi - mean_y) end)
     |> division(size - 1)
   end
 
@@ -182,15 +228,9 @@ defmodule LearnKit.Math do
     mean_x = mean(x)
     mean_y = mean(y)
 
-    divider = Enum.zip(x, y)
-            |> Enum.map(fn {xi, yi} -> (xi - mean_x) * (yi - mean_y) end)
-            |> Enum.sum
-    denom_x = x
-              |> Enum.map(fn xi -> :math.pow(xi - mean_x, 2) end)
-              |> Enum.sum
-    denom_y = y
-              |> Enum.map(fn yi -> :math.pow(yi - mean_y, 2) end)
-              |> Enum.sum
+    divider = Enum.zip(x, y) |> Enum.reduce(0, fn {xi, yi}, acc -> acc + (xi - mean_x) * (yi - mean_y) end)
+    denom_x = x |> Enum.reduce(0, fn xi, acc -> acc + :math.pow(xi - mean_x, 2) end)
+    denom_y = y |> Enum.reduce(0, fn yi, acc -> acc + :math.pow(yi - mean_y, 2) end)
 
     divider / :math.sqrt(denom_x * denom_y)
   end

@@ -29,6 +29,12 @@ defmodule LearnKit.Regression.LinearTest do
     assert coefficients == [-1.5, 4.0]
   end
 
+  test "fit data set with gradient descent", state do
+    %Linear{coefficients: coefficients} = state[:predictor] |> Linear.fit([method: "gradient descent"])
+
+    assert [-1.5, 4.0] = coefficients |> Enum.map(fn x -> Float.round(x, 2) end)
+  end
+
   test "return prediction using the linear model", state do
     predictor = state[:predictor] |> Linear.fit
 
