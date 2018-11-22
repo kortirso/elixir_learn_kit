@@ -7,7 +7,11 @@ defmodule LearnKit.Regression.Linear.Fit do
 
   defmacro __using__(_opts) do
     quote do
-      defp fit_data(factors, results) do
+      defp fit_data(method, factors, results) when method == "gradient descent" do
+
+      end
+
+      defp fit_data(_, factors, results) do
         beta = Math.correlation(factors, results) * Math.standard_deviation(results) / Math.standard_deviation(factors)
         alpha = Math.mean(results) - beta * Math.mean(factors)
         [alpha, beta]
