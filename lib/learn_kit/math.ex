@@ -65,7 +65,7 @@ defmodule LearnKit.Math do
 
   def variance(list, list_mean) when is_list(list) do
     list
-    |> Enum.map(fn x -> pow(list_mean - x, 2) end)
+    |> Enum.map(fn x -> :math.pow(list_mean - x, 2) end)
     |> mean
   end
 
@@ -146,21 +146,6 @@ defmodule LearnKit.Math do
   end
 
   @doc """
-  Pow number
-
-  ## Examples
-
-      iex> LearnKit.Math.pow(10, 2)
-      100
-
-  """
-  @spec pow(number, number) :: number
-
-  def pow(x, y) do
-    :math.pow(x, y)
-  end
-
-  @doc """
   Calculate the covariance of two lists
 
   ## Examples
@@ -201,10 +186,10 @@ defmodule LearnKit.Math do
             |> Enum.map(fn {xi, yi} -> (xi - mean_x) * (yi - mean_y) end)
             |> Enum.sum
     denom_x = x
-              |> Enum.map(fn xi -> pow(xi - mean_x, 2) end)
+              |> Enum.map(fn xi -> :math.pow(xi - mean_x, 2) end)
               |> Enum.sum
     denom_y = y
-              |> Enum.map(fn yi -> pow(yi - mean_y, 2) end)
+              |> Enum.map(fn yi -> :math.pow(yi - mean_y, 2) end)
               |> Enum.sum
 
     divider / :math.sqrt(denom_x * denom_y)

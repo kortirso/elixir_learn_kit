@@ -89,8 +89,26 @@ defmodule LearnKit.Regression.Linear do
   @spec predict(%LearnKit.Regression.Linear{coefficients: coefficients}, list) :: list
 
   def predict(%Linear{coefficients: coefficients}, samples) do
-    IO.inspect coefficients
     samples
     |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
+  end
+
+  @doc """
+  Returns the coefficient of determination R^2 of the prediction
+
+  ## Parameters
+
+    - predictor: %LearnKit.Regression.Linear{}
+
+  ## Examples
+
+      iex> predictor |> LearnKit.Regression.Linear.score
+      0.9876543209876543
+
+  """
+  @spec score(%LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}) :: number
+
+  def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
+    calculate_score(coefficients, factors, results)
   end
 end
