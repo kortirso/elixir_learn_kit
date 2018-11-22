@@ -49,7 +49,7 @@ defmodule LearnKit.Regression.Linear do
   end
 
   @doc """
-  Fit train data with least squares method
+  Fit train data
 
   ## Parameters
 
