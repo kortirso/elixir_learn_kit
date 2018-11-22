@@ -19,8 +19,8 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   end
 
   test "fit data set" do
-    classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
-    %LearnKit.NaiveBayes.Gaussian{fit_data: fit_data} = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+    classificator = Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
+    %Gaussian{fit_data: fit_data} = classificator |> Gaussian.fit
 
     assert fit_data == [
                         label1: [
@@ -35,26 +35,26 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   end
 
   test "return probability estimates for the feature" do
-    classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
-    classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+    classificator = Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
+    classificator = classificator |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
+    assert {:ok, result} = classificator |> Gaussian.predict_proba([1, 2])
     assert result == [label1: 0.0, label2: 0.017199571]
   end
 
   test "return exact prediction for the feature" do
-    classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
-    classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+    classificator = Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
+    classificator = classificator |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+    assert {:ok, result} = classificator |> Gaussian.predict([1, 2])
     assert result == {:label2, 0.017199571}
   end
 
   test "returns the mean accuracy on the given test data and labels" do
-    classificator = LearnKit.NaiveBayes.Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
-    classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+    classificator = Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])
+    classificator = classificator |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> LearnKit.NaiveBayes.Gaussian.score
+    assert {:ok, result} = classificator |> Gaussian.score
     assert result == 0.857143
   end
 end

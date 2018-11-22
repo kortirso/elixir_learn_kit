@@ -1,7 +1,7 @@
 defmodule LearnKit.KnnTest do
   use ExUnit.Case
 
-  alias LearnKit.{Knn}
+  alias LearnKit.Knn
 
   test "create new knn classificator with empty data set" do
     assert %Knn{data_set: data_set} = Knn.new
@@ -19,15 +19,15 @@ defmodule LearnKit.KnnTest do
   end
 
   test "classify new feature" do
-    classificator = LearnKit.Knn.new
-                    |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
-                    |> LearnKit.Knn.add_train_data({:a1, [-2, -1]})
-                    |> LearnKit.Knn.add_train_data({:a1, [-3, -2]})
-                    |> LearnKit.Knn.add_train_data({:a2, [1, 1]})
-                    |> LearnKit.Knn.add_train_data({:a2, [2, 1]})
-                    |> LearnKit.Knn.add_train_data({:a2, [3, 2]})
-                    |> LearnKit.Knn.add_train_data({:a2, [-2, -2]})
+    classificator = Knn.new
+                    |> Knn.add_train_data({:a1, [-1, -1]})
+                    |> Knn.add_train_data({:a1, [-2, -1]})
+                    |> Knn.add_train_data({:a1, [-3, -2]})
+                    |> Knn.add_train_data({:a2, [1, 1]})
+                    |> Knn.add_train_data({:a2, [2, 1]})
+                    |> Knn.add_train_data({:a2, [3, 2]})
+                    |> Knn.add_train_data({:a2, [-2, -2]})
 
-    assert {:ok, :a1} = LearnKit.Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+    assert {:ok, :a1} = Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
   end
 end

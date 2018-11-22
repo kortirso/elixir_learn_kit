@@ -83,14 +83,14 @@ defmodule LearnKit.Regression.Linear do
   ## Examples
 
       iex> predictor |> LearnKit.Regression.Linear.predict([4, 8, 13])
-      [14.5, 30.5, 50.5]
+      {:ok, [14.5, 30.5, 50.5]}
 
   """
-  @spec predict(%LearnKit.Regression.Linear{coefficients: coefficients}, list) :: list
+  @spec predict(%LearnKit.Regression.Linear{coefficients: coefficients}, list) :: {:ok, list}
 
   def predict(%Linear{coefficients: coefficients}, samples) do
-    samples
-    |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
+    result = samples |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
+    {:ok, result}
   end
 
   @doc """
@@ -103,12 +103,12 @@ defmodule LearnKit.Regression.Linear do
   ## Examples
 
       iex> predictor |> LearnKit.Regression.Linear.score
-      0.9876543209876543
+      {:ok, 0.9876543209876543}
 
   """
-  @spec score(%LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}) :: number
+  @spec score(%LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
 
   def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
-    calculate_score(coefficients, factors, results)
+    {:ok, calculate_score(coefficients, factors, results)}
   end
 end

@@ -136,7 +136,7 @@ defmodule LearnKit.Math do
   ## Examples
 
       iex> LearnKit.Math.division(10, 2)
-      5
+      5.0
 
   """
   @spec division(number, number) :: number
@@ -154,7 +154,7 @@ defmodule LearnKit.Math do
       5.5
 
   """
-  @spec covariance(list,list) :: number
+  @spec covariance(list, list) :: number
 
   def covariance(x, y) when length(x) == length(y) do
     mean_x = mean(x)
