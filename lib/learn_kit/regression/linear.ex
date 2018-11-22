@@ -8,6 +8,7 @@ defmodule LearnKit.Regression.Linear do
   alias LearnKit.Regression.Linear
 
   use Linear.Fit
+  use Linear.Predict
 
   @type factors :: [number]
   @type results :: [number]
@@ -38,8 +39,8 @@ defmodule LearnKit.Regression.Linear do
 
   ## Examples
 
-      iex> predictor = LearnKit.Regression.Linear.new([1, 2, 3, 4], [2, 3, 4, 5])
-      %LearnKit.Regression.Linear{factors: [1, 2, 3, 4], results: [2, 3, 4, 5], coefficients: []}
+      iex> predictor = LearnKit.Regression.Linear.new([1, 2, 3, 4], [3, 6, 10, 15])
+      %LearnKit.Regression.Linear{factors: [1, 2, 3, 4], results: [3, 6, 10, 15], coefficients: []}
 
   """
   @spec new(factors, results) :: %LearnKit.Regression.Linear{factors: factors, results: results, coefficients: []}
@@ -57,11 +58,11 @@ defmodule LearnKit.Regression.Linear do
 
   ## Examples
 
-      iex> predictor |> LearnKit.Regression.Linear.fit
+      iex> predictor = predictor |> LearnKit.Regression.Linear.fit
       %LearnKit.Regression.Linear{
-        coefficients: [1.0, 1.0],
+        coefficients: [-1.5, 4.0],
         factors: [1, 2, 3, 4],
-        results: [2, 3, 4, 5]
+        results: [3, 6, 10, 15]
       }
 
   """
@@ -69,5 +70,27 @@ defmodule LearnKit.Regression.Linear do
 
   def fit(%Linear{factors: factors, results: results}) do
     %Linear{factors: factors, results: results, coefficients: fit_data(factors, results)}
+  end
+
+  @doc """
+  Predict using the linear model
+
+  ## Parameters
+
+    - predictor: %LearnKit.Regression.Linear{}
+    - samples: Array of variables
+
+  ## Examples
+
+      iex> predictor |> LearnKit.Regression.Linear.predict([4, 8, 13])
+      [14.5, 30.5, 50.5]
+
+  """
+  @spec predict(%LearnKit.Regression.Linear{coefficients: coefficients}, list) :: list
+
+  def predict(%Linear{coefficients: coefficients}, samples) do
+    IO.inspect coefficients
+    samples
+    |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
   end
 end
