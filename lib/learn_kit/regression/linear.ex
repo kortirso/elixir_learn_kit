@@ -7,8 +7,7 @@ defmodule LearnKit.Regression.Linear do
 
   alias LearnKit.Regression.Linear
 
-  use Linear.Fit
-  use Linear.Predict
+  use Linear.Calculations
 
   @type factors :: [number]
   @type results :: [number]
@@ -72,7 +71,7 @@ defmodule LearnKit.Regression.Linear do
 
       iex> predictor = predictor |> LearnKit.Regression.Linear.fit([method: "gradient descent"])
       %LearnKit.Regression.Linear{
-        coefficients: [-1.5, 4.0],
+        coefficients: [-1.4975720508482548, 3.9992148848913356],
         factors: [1, 2, 3, 4],
         results: [3, 6, 10, 15]
       }

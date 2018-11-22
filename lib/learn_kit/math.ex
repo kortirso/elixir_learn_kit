@@ -131,6 +131,38 @@ defmodule LearnKit.Math do
   end
 
   @doc """
+  Scalar multiplication
+
+  ## Examples
+
+      iex> LearnKit.Math.scalar_multiply(10, [5, 6])
+      [50, 60]
+
+  """
+  @spec scalar_multiply(integer, list) :: list
+
+  def scalar_multiply(multiplicator, list) when is_list(list) do
+    list
+    |> Enum.map(fn x -> x * multiplicator end)
+  end
+
+  @doc """
+  Vector subtraction
+
+  ## Examples
+
+      iex> LearnKit.Math.vector_subtraction([40, 50, 60], [35, 5, 40])
+      [5, 45, 20]
+
+  """
+  @spec vector_subtraction(list, list) :: list
+
+  def vector_subtraction(x, y) when is_list(x) and is_list(y) and length(x) == length(y) do
+    Enum.zip(x, y)
+    |> Enum.map(fn {xi, yi} -> xi - yi end)
+  end
+
+  @doc """
   Division for 2 elements
 
   ## Examples
