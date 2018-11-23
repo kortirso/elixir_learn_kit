@@ -23,11 +23,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   @type fit_data :: [{label, fit_features}]
 
   @doc """
-  Creates classificator with empty data_set
+  Creates classifier with empty data_set
 
   ## Examples
 
-      iex> classificator = LearnKit.NaiveBayes.Gaussian.new
+      iex> classifier = LearnKit.NaiveBayes.Gaussian.new
       %LearnKit.NaiveBayes.Gaussian{data_set: [], fit_data: []}
 
   """
@@ -39,7 +39,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   end
 
   @doc """
-  Creates classificator with data_set
+  Creates classifier with data_set
 
   ## Parameters
 
@@ -47,7 +47,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Examples
 
-      iex> classificator = LearnKit.NaiveBayes.Gaussian.new([{:a1, [[1, 2], [2, 3]]}, {:b1, [[-1, -2]]}])
+      iex> classifier = LearnKit.NaiveBayes.Gaussian.new([{:a1, [[1, 2], [2, 3]]}, {:b1, [[-1, -2]]}])
       %LearnKit.NaiveBayes.Gaussian{data_set: [a1: [[1, 2], [2, 3]], b1: [[-1, -2]]], fit_data: []}
 
   """
@@ -58,16 +58,16 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   end
 
   @doc """
-  Add train data to classificator
+  Add train data to classifier
 
   ## Parameters
 
-    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
     - train data: tuple with label and feature
 
   ## Examples
 
-      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
+      iex> classifier = classifier |> LearnKit.NaiveBayes.Gaussian.add_train_data({:a1, [-1, -1]})
       %LearnKit.NaiveBayes.Gaussian{data_set: [a1: [[-1, -1]]], fit_data: []}
 
   """
@@ -84,11 +84,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Parameters
 
-    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
 
   ## Examples
 
-      iex> classificator = classificator |> LearnKit.NaiveBayes.Gaussian.fit
+      iex> classifier = classifier |> LearnKit.NaiveBayes.Gaussian.fit
       %LearnKit.NaiveBayes.Gaussian{
         data_set: [a1: [[-1, -1]]],
         fit_data: [
@@ -111,11 +111,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Parameters
 
-    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
 
   ## Examples
 
-      iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
+      iex> classifier |> LearnKit.NaiveBayes.Gaussian.predict_proba([1, 2])
       {:ok, [a1: 0.0359, a2: 0.0039]}
 
   """
@@ -131,11 +131,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Parameters
 
-    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
 
   ## Examples
 
-      iex> classificator |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
+      iex> classifier |> LearnKit.NaiveBayes.Gaussian.predict([1, 2])
       {:ok, {:a1, 0.334545454}}
 
   """
@@ -151,11 +151,11 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   ## Parameters
 
-    - classificator: %LearnKit.NaiveBayes.Gaussian{}
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
 
   ## Examples
 
-      iex> classificator |> LearnKit.NaiveBayes.Gaussian.score
+      iex> classifier |> LearnKit.NaiveBayes.Gaussian.score
       {:ok, 0.857143}
 
   """

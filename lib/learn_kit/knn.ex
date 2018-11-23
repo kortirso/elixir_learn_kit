@@ -16,11 +16,11 @@ defmodule LearnKit.Knn do
   @type data_set :: [{label, features}]
 
   @doc """
-  Creates classificator with empty data_set
+  Creates classifier with empty data_set
 
   ## Examples
 
-      iex> classificator = LearnKit.Knn.new
+      iex> classifier = LearnKit.Knn.new
       %LearnKit.Knn{data_set: []}
 
   """
@@ -32,7 +32,7 @@ defmodule LearnKit.Knn do
   end
 
   @doc """
-  Creates classificator with data_set
+  Creates classifier with data_set
 
   ## Parameters
 
@@ -40,7 +40,7 @@ defmodule LearnKit.Knn do
 
   ## Examples
 
-      iex> classificator = LearnKit.Knn.new([{:a1, [[1, 2], [2, 3]]}, {:b1, [[-1, -2]]}])
+      iex> classifier = LearnKit.Knn.new([{:a1, [[1, 2], [2, 3]]}, {:b1, [[-1, -2]]}])
       %LearnKit.Knn{data_set: [a1: [[1, 2], [2, 3]], b1: [[-1, -2]]]}
 
   """
@@ -51,16 +51,16 @@ defmodule LearnKit.Knn do
   end
 
   @doc """
-  Add train data to classificator
+  Add train data to classifier
 
   ## Parameters
 
-    - classificator: %LearnKit.Knn{}
+    - classifier: %LearnKit.Knn{}
     - train data: tuple with label and feature
 
   ## Examples
 
-      iex> classificator = classificator |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
+      iex> classifier = classifier |> LearnKit.Knn.add_train_data({:a1, [-1, -1]})
       %LearnKit.Knn{data_set: [a1: [[-1, -1]]]}
 
   """
@@ -77,7 +77,7 @@ defmodule LearnKit.Knn do
 
   ## Parameters
 
-    - classificator: %LearnKit.Knn{}
+    - classifier: %LearnKit.Knn{}
     - options: keyword list with options
 
   ## Options
@@ -89,7 +89,7 @@ defmodule LearnKit.Knn do
 
   ## Examples
 
-      iex> classificator |> LearnKit.Knn.classify([feature: [-1, -2], k: 3, weight: "distance"])
+      iex> classifier |> LearnKit.Knn.classify([feature: [-1, -2], k: 3, weight: "distance"])
       {:ok, :a1}
 
   """

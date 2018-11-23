@@ -60,11 +60,11 @@ Returns the coefficient of determination R^2 of the prediction:
 
 ### K-Nearest Neighbours classification
 
-Initialize classificator with data set consists from labels and features:
+Initialize classifier with data set consists from labels and features:
 
 ```elixir
   alias LearnKit.Knn
-  classificator = Knn.new
+  classifier = Knn.new
                   |> Knn.add_train_data({:a1, [-1, -1]})
                   |> Knn.add_train_data({:a1, [-2, -1]})
                   |> Knn.add_train_data({:a2, [1, 1]})
@@ -73,7 +73,7 @@ Initialize classificator with data set consists from labels and features:
 Predict label for new feature:
 
 ```elixir
-  Knn.classify(classificator, [feature: [-1, -2], k: 3, weight: "distance"])
+  Knn.classify(classifier, [feature: [-1, -2], k: 3, weight: "distance"])
 ```
     feature - new feature for prediction, required
     k - number of nearest neighbors, optional, default - 3
@@ -82,11 +82,11 @@ Predict label for new feature:
 
 ### Gaussian Naive Bayes classification
 
-Initialize classificator with data set consists from labels and features:
+Initialize classifier with data set consists from labels and features:
 
 ```elixir
   alias LearnKit.NaiveBayes.Gaussian
-  classificator = Gaussian.new
+  classifier = Gaussian.new
                   |> Gaussian.add_train_data({:a1, [-1, -1]})
                   |> Gaussian.add_train_data({:a1, [-2, -1]})
                   |> Gaussian.add_train_data({:a2, [1, 1]})
@@ -95,27 +95,27 @@ Initialize classificator with data set consists from labels and features:
 Fit data set:
 
 ```elixir
-  classificator = classificator |> Gaussian.fit
+  classifier = classifier |> Gaussian.fit
 ```
 
 Return probability estimates for the feature:
 
 ```elixir
-  classificator |> Gaussian.predict_proba([1, 2])
+  classifier |> Gaussian.predict_proba([1, 2])
 ```
     feature - new feature for prediction, required
 
 Return exact prediction for the feature:
 
 ```elixir
-  classificator |> Gaussian.predict([1, 2])
+  classifier |> Gaussian.predict([1, 2])
 ```
     feature - new feature for prediction, required
 
 Returns the mean accuracy on the given test data and labels:
 
 ```elixir
-  classificator |> Gaussian.score
+  classifier |> Gaussian.score
 ```
 
 ## Contributing
