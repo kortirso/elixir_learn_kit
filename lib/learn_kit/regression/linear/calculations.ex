@@ -29,8 +29,7 @@ defmodule LearnKit.Regression.Linear.Calculations do
 
       defp total_sum_of_squares(list) do
         mean_list = Math.mean(list)
-        list
-        |> Enum.reduce(0, fn x, acc -> acc + :math.pow(x - mean_list, 2) end)
+        Enum.reduce(list, 0, fn x, acc -> acc + :math.pow(x - mean_list, 2) end)
       end
 
       defp sum_of_squared_errors(coefficients, factors, results) do
@@ -45,7 +44,7 @@ defmodule LearnKit.Regression.Linear.Calculations do
       end
 
       defp squared_error_gradient(coefficients, x, y) do
-        error_variable = coefficients |> prediction_error(x, y)
+        error_variable = prediction_error(coefficients, x, y)
         [
           -2 * error_variable,
           -2 * error_variable * x
@@ -64,22 +63,24 @@ defmodule LearnKit.Regression.Linear.Calculations do
           min_value,
           iterations_with_no_improvement,
           alpha
-        ] = data |> check_value(min_value, theta, min_theta, iterations_with_no_improvement, alpha)
+        ] = check_value(data, min_value, theta, min_theta, iterations_with_no_improvement, alpha)
 
-        theta = data
-                |> Enum.shuffle
-                |> Enum.reduce(theta, fn {xi, yi}, acc ->
-                  gradient_i = squared_error_gradient(acc, xi, yi)
-                  acc |> Math.vector_subtraction(alpha |> Math.scalar_multiply(gradient_i))
-                end)
+        theta =
+          data
+          |> Enum.shuffle()
+          |> Enum.reduce(theta, fn {xi, yi}, acc ->
+            gradient_i = squared_error_gradient(acc, xi, yi)
+            acc |> Math.vector_subtraction(alpha |> Math.scalar_multiply(gradient_i))
+          end)
         gradient_descent_iteration(theta, alpha, min_theta, min_value, data, iterations_with_no_improvement)
       end
 
       defp check_value(data, min_value, theta, min_theta, iterations_with_no_improvement, alpha) do
-        value = data |> Enum.reduce(0, fn {xi, yi}, acc -> acc + squared_prediction_error(theta, xi, yi) end)
+        value = Enum.reduce(data, 0, fn {xi, yi}, acc -> acc + squared_prediction_error(theta, xi, yi) end)
         cond do
           value < min_value ->
             [theta, value, 0, 0.0001]
+
           true ->
             [min_theta, min_value, iterations_with_no_improvement + 1, alpha * 0.9]
         end

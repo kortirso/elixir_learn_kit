@@ -80,9 +80,10 @@ defmodule LearnKit.Regression.Linear do
   @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
 
   def fit(%Linear{factors: factors, results: results}, options \\ []) do
-    coefficients = Keyword.merge([method: ""], options)
-                    |> define_method_for_fit
-                    |> fit_data(factors, results)
+    coefficients =
+      Keyword.merge([method: ""], options)
+      |> define_method_for_fit()
+      |> fit_data(factors, results)
     %Linear{factors: factors, results: results, coefficients: coefficients}
   end
 
@@ -110,7 +111,7 @@ defmodule LearnKit.Regression.Linear do
   @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
   def predict(%Linear{coefficients: coefficients}, samples) do
-    result = samples |> Enum.map(fn sample -> predict_sample(sample, coefficients) end)
+    result = Enum.map(samples, fn sample -> predict_sample(sample, coefficients) end)
     {:ok, result}
   end
 

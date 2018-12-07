@@ -34,8 +34,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   @spec new() :: %Gaussian{data_set: []}
 
   def new do
-    []
-    |> Gaussian.new
+    Gaussian.new([])
   end
 
   @doc """
@@ -122,7 +121,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   @spec predict_proba(%Gaussian{fit_data: fit_data}, feature) :: {:ok, predictions}
 
   def predict_proba(%Gaussian{fit_data: fit_data}, feature) do
-    result = fit_data |> classify_data(feature)
+    result = classify_data(fit_data, feature)
     {:ok, result}
   end
 
@@ -162,7 +161,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   @spec score(%Gaussian{data_set: data_set, fit_data: fit_data}) :: {:ok, number}
 
   def score(%Gaussian{data_set: data_set, fit_data: fit_data}) do
-    result = fit_data |> calc_score(data_set)
+    result = calc_score(fit_data, data_set)
     {:ok, result}
   end
 end

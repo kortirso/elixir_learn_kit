@@ -27,8 +27,7 @@ defmodule LearnKit.Knn do
   @spec new() :: %Knn{data_set: []}
 
   def new do
-    []
-    |> Knn.new
+    Knn.new([])
   end
 
   @doc """

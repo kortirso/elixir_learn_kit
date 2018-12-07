@@ -63,8 +63,7 @@ defmodule LearnKit.Math do
 
   def variance(list) when is_list(list) do
     list_mean = mean(list)
-    list
-    |> variance(list_mean)
+    variance(list, list_mean)
   end
 
   @doc """
@@ -81,7 +80,7 @@ defmodule LearnKit.Math do
   def variance(list, list_mean) when is_list(list) do
     list
     |> Enum.map(fn x -> :math.pow(list_mean - x, 2) end)
-    |> mean
+    |> mean()
   end
 
   @doc """
@@ -102,8 +101,8 @@ defmodule LearnKit.Math do
 
   def standard_deviation(list) when is_list(list) do
     list
-    |> variance
-    |> :math.sqrt
+    |> variance()
+    |> :math.sqrt()
   end
 
   @doc """
@@ -118,8 +117,7 @@ defmodule LearnKit.Math do
   @spec standard_deviation_from_variance(number) :: number
 
   def standard_deviation_from_variance(list_variance) do
-    list_variance
-    |> :math.sqrt
+    :math.sqrt(list_variance)
   end
 
   @doc """
@@ -157,8 +155,7 @@ defmodule LearnKit.Math do
   @spec scalar_multiply(integer, list) :: list
 
   def scalar_multiply(multiplicator, list) when is_list(list) do
-    list
-    |> Enum.map(fn x -> x * multiplicator end)
+    Enum.map(list, fn x -> x * multiplicator end)
   end
 
   @doc """
@@ -229,8 +226,8 @@ defmodule LearnKit.Math do
     mean_y = mean(y)
 
     divider = Enum.zip(x, y) |> Enum.reduce(0, fn {xi, yi}, acc -> acc + (xi - mean_x) * (yi - mean_y) end)
-    denom_x = x |> Enum.reduce(0, fn xi, acc -> acc + :math.pow(xi - mean_x, 2) end)
-    denom_y = y |> Enum.reduce(0, fn yi, acc -> acc + :math.pow(yi - mean_y, 2) end)
+    denom_x = Enum.reduce(x, 0, fn xi, acc -> acc + :math.pow(xi - mean_x, 2) end)
+    denom_y = Enum.reduce(y, 0, fn yi, acc -> acc + :math.pow(yi - mean_y, 2) end)
 
     divider / :math.sqrt(denom_x * denom_y)
   end

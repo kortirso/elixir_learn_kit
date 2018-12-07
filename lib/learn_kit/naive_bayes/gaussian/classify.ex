@@ -7,7 +7,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
       # classify data
       # returns data like [label1: 0.03592747361085857, label2: 0.00399309643713954]
       defp classify_data(fit_data, feature) do
-        labels_count = fit_data |> Keyword.keys |> length
+        labels_count = fit_data |> Keyword.keys() |> length()
         fit_data
         |> Enum.map(fn {label, fit_results} ->
           {label, class_probability(labels_count, feature, fit_results)}

@@ -9,11 +9,11 @@ defmodule LearnKit.Knn.Classify do
     quote do
       defp prediction(data_set, options) do
         calc_distances_for_features(data_set, options)
-        |> sort_distances
+        |> sort_distances()
         |> select_closest_features(options)
         |> calc_feature_weights(options)
-        |> define_weight_of_labels
-        |> sort_result
+        |> accumulate_weight_of_labels([])
+        |> sort_result()
       end
 
       # select algorithm for prediction
@@ -25,45 +25,35 @@ defmodule LearnKit.Knn.Classify do
       end
 
       defp sort_distances(features) do
-        features
-        |> Enum.sort(&(elem(&1, 0) <= elem(&2, 0)))
+        Enum.sort(features, &(elem(&1, 0) <= elem(&2, 0)))
       end
 
       defp select_closest_features(features, options) do
-        features
-        |> Enum.take(Keyword.get(options, :k))
+        Enum.take(features, Keyword.get(options, :k))
       end
 
       defp calc_feature_weights(features, options) do
-        features
-        |> Enum.map(fn feature ->
-          feature
-          |> Tuple.append(calc_feature_weight(Keyword.get(options, :weight), elem(feature, 0)))
+        Enum.map(features, fn feature ->
+          Tuple.append(feature, calc_feature_weight(Keyword.get(options, :weight), elem(feature, 0)))
         end)
-      end
-
-      defp define_weight_of_labels(features) do
-        features
-        |> accumulate_weight_of_labels([])
       end
 
       defp sort_result(features) do
         features
         |> Enum.sort(&(elem(&1, 1) >= elem(&2, 1)))
-        |> List.first
+        |> List.first()
       end
 
       # brute algorithm for prediction
       defp brute_algorithm(data_set, options) do
         data_set
-        |> Keyword.keys
+        |> Keyword.keys()
         |> handle_features_in_label(data_set, Keyword.get(options, :feature))
-        |> List.flatten
+        |> List.flatten()
       end
 
       defp handle_features_in_label(keys, data_set, current_feature) do
-        keys
-        |> Enum.map(fn key ->
+        Enum.map(keys, fn key ->
           data_set
           |> Keyword.get(key)
           |> filter_features_by_size(current_feature)
@@ -72,23 +62,17 @@ defmodule LearnKit.Knn.Classify do
       end
 
       defp filter_features_by_size(features, current_feature) do
-        features
-        |> Enum.filter(fn feature ->
+        Enum.filter(features, fn feature ->
           length(feature) == length(current_feature)
         end)
       end
 
       defp calc_distances_in_label(features, current_feature, key) do
-        features
-        |> Enum.reduce([], fn feature, acc ->
-          distance = feature |> calc_distance_between_features(current_feature)
+        Enum.reduce(features, [], fn feature, acc ->
+          distance = calc_distance_between_points(0, feature, current_feature, 0, length(feature) - 1)
           if distance == 0, do: raise "Feature exists in train data set with label #{key}"
           acc = [{distance, key} | acc]
         end)
-      end
-
-      defp calc_distance_between_features(feature_from_data_set, feature) do
-        calc_distance_between_points(0, feature_from_data_set, feature, 0, length(feature_from_data_set) - 1)
       end
 
       defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do
@@ -99,8 +83,7 @@ defmodule LearnKit.Knn.Classify do
       end
 
       defp calc_distance_between_points(acc, _, _, _, _) do
-        acc
-        |> :math.sqrt
+        :math.sqrt(acc)
       end
 
       defp calc_feature_weight(weight, distance) do
