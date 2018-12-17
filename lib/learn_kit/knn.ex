@@ -5,7 +5,7 @@ defmodule LearnKit.Knn do
 
   defstruct data_set: []
 
-  alias LearnKit.{Knn}
+  alias LearnKit.Knn
 
   use Knn.Classify
 

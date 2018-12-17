@@ -102,17 +102,6 @@ defmodule LearnKit.Knn.Classify do
         end)
       end
 
-      #defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do
-      #  Enum.at(feature_from_data_set, current_index) - Enum.at(feature, current_index)
-      #  |> :math.pow(2)
-      #  |> Math.summ(acc)
-      #  |> calc_distance_between_points(feature_from_data_set, feature, current_index + 1, size)
-      #end
-
-      #defp calc_distance_between_points(acc, _, _, _, _) do
-      #  :math.sqrt(acc)
-      #end
-
       defp calc_feature_weight(weight, distance) do
         case weight do
           "uniform" -> 1
