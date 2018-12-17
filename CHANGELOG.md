@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 ### Modified
-- K-Nearest Neighbours algorithm, add errors conditions and tests
+- errors conditions and tests for KNN
+- distance calculation between points for KNN
 
 ## [0.1.3] - 2018-11-22
 ### Modified

@@ -83,21 +83,35 @@ defmodule LearnKit.Knn.Classify do
 
       defp calc_distances_in_label(features, current_feature, key) do
         Enum.reduce(features, [], fn feature, acc ->
-          distance = calc_distance_between_points(0, feature, current_feature, 0, length(feature) - 1)
+          distance = calc_distance_between_features(feature, current_feature)
           acc = [{distance, key} | acc]
         end)
       end
 
-      defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do
-        Enum.at(feature_from_data_set, current_index) - Enum.at(feature, current_index)
-        |> :math.pow(2)
-        |> Math.summ(acc)
-        |> calc_distance_between_points(feature_from_data_set, feature, current_index + 1, size)
+      defp calc_distance_between_features(feature_from_data_set, feature) do
+        Enum.zip(feature_from_data_set, feature)
+        |> calc_distance_between_points()
+        |> :math.sqrt()
       end
 
-      defp calc_distance_between_points(acc, _, _, _, _) do
-        :math.sqrt(acc)
+      defp calc_distance_between_points(list) do
+        Enum.reduce(list, 0, fn {xi, yi}, acc ->
+          xi - yi
+          |> :math.pow(2)
+          |> Math.summ(acc)
+        end)
       end
+
+      #defp calc_distance_between_points(acc, feature_from_data_set, feature, current_index, size) when current_index <= size do
+      #  Enum.at(feature_from_data_set, current_index) - Enum.at(feature, current_index)
+      #  |> :math.pow(2)
+      #  |> Math.summ(acc)
+      #  |> calc_distance_between_points(feature_from_data_set, feature, current_index + 1, size)
+      #end
+
+      #defp calc_distance_between_points(acc, _, _, _, _) do
+      #  :math.sqrt(acc)
+      #end
 
       defp calc_feature_weight(weight, distance) do
         case weight do
