@@ -8,12 +8,11 @@ defmodule LearnKit.Knn.Classify do
   defmacro __using__(_opts) do
     quote do
       defp prediction(data_set, options) do
-        calc_distances_for_features(data_set, options)
+        data_set
+        |> calc_distances_for_features(options)
         |> sort_distances()
         |> select_closest_features(options)
-        |> calc_feature_weights(options)
-        |> accumulate_weight_of_labels([])
-        |> sort_result()
+        |> check_zero_distance(options)
       end
 
       # select algorithm for prediction
@@ -30,6 +29,21 @@ defmodule LearnKit.Knn.Classify do
 
       defp select_closest_features(features, options) do
         Enum.take(features, Keyword.get(options, :k))
+      end
+
+      defp check_zero_distance(closest_features, options) do
+        {distance, label} = Enum.at(closest_features, 0)
+        cond do
+          distance == 0 -> {label, 0}
+          true -> select_best_label(closest_features, options)
+        end
+      end
+
+      defp select_best_label(features, options) do
+        features
+        |> calc_feature_weights(options)
+        |> accumulate_weight_of_labels([])
+        |> sort_result()
       end
 
       defp calc_feature_weights(features, options) do
@@ -70,7 +84,6 @@ defmodule LearnKit.Knn.Classify do
       defp calc_distances_in_label(features, current_feature, key) do
         Enum.reduce(features, [], fn feature, acc ->
           distance = calc_distance_between_points(0, feature, current_feature, 0, length(feature) - 1)
-          if distance == 0, do: raise "Feature exists in train data set with label #{key}"
           acc = [{distance, key} | acc]
         end)
       end

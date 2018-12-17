@@ -45,7 +45,7 @@ defmodule LearnKit.Knn do
   """
   @spec new(data_set) :: %Knn{data_set: data_set}
 
-  def new(data_set) do
+  def new(data_set) when is_list(data_set) do
     %Knn{data_set: data_set}
   end
 
@@ -65,7 +65,7 @@ defmodule LearnKit.Knn do
   """
   @spec add_train_data(%Knn{data_set: data_set}, point) :: %Knn{data_set: data_set}
 
-  def add_train_data(%Knn{data_set: data_set}, {key, value}) do
+  def add_train_data(%Knn{data_set: data_set}, {key, value}) when is_atom(key) and is_list(value) do
     features = if Keyword.has_key?(data_set, key), do: Keyword.get(data_set, key), else: []
     data_set = Keyword.put(data_set, key, [value | features])
     %Knn{data_set: data_set}
@@ -94,16 +94,21 @@ defmodule LearnKit.Knn do
   """
   @spec classify(%Knn{data_set: data_set}, [tuple]) :: {:ok, label}
 
-  def classify(%Knn{data_set: data_set}, options \\ []) do
-    try do
-      unless Keyword.has_key?(options, :feature), do: raise "Feature option is required"
-      # modification of options
-      options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
-      # prediction
-      {label, _} = prediction(data_set, options)
-      {:ok, label}
-    rescue
-      error -> {:error, error.message}
+  def classify(%Knn{data_set: data_set}, options) when is_list(options) do
+    cond do
+      !Keyword.has_key?(options, :feature) ->
+        {:error, "Feature option is required"}
+
+      !is_list(Keyword.get(options, :feature)) ->
+        {:error, "Feature option must be presented as array"}
+
+      Keyword.has_key?(options, :k) && (!is_integer(Keyword.get(options, :k)) || Keyword.get(options, :k) <= 0) ->
+        {:error, "K option must be positive integer"}
+
+      true ->
+        options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
+        {label, _} = prediction(data_set, options)
+        {:ok, label}
     end
   end
 end
