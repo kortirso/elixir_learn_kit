@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 ### Added
 - preprocessing normalization for data set
+- normalize train data for Gaussian NB
 
 ### Modified
 - normalization can be selected for KNN

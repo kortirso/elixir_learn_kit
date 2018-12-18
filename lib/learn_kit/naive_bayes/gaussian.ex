@@ -7,6 +7,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
 
   alias LearnKit.NaiveBayes.Gaussian
 
+  use Gaussian.Normalize
   use Gaussian.Fit
   use Gaussian.Classify
   use Gaussian.Score
@@ -76,6 +77,29 @@ defmodule LearnKit.NaiveBayes.Gaussian do
     features = if Keyword.has_key?(data_set, key), do: Keyword.get(data_set, key), else: []
     data_set = Keyword.put(data_set, key, [value | features])
     %Gaussian{data_set: data_set}
+  end
+
+  @doc """
+  Normalize train data
+
+  ## Parameters
+
+    - classifier: %LearnKit.NaiveBayes.Gaussian{}
+    - type: none/minimax/z_normalization, default is none, optional
+
+  ## Examples
+
+      iex> classifier = classifier |> LearnKit.NaiveBayes.Gaussian.normalize_train_data("minimax")
+      %LearnKit.NaiveBayes.Gaussian{
+        data_set: [a1: [[0.6666666666666666, 0.8], [1.0, 1.0]], b1: [[0.0, 0.0]]],
+        fit_data: []
+      }
+
+  """
+  @spec normalize_train_data(%Gaussian{data_set: data_set}, String.t()) :: %Gaussian{data_set: data_set, fit_data: fit_data}
+
+  def normalize_train_data(%Gaussian{data_set: data_set}, type \\ "none") when is_binary(type) do
+    %Gaussian{data_set: normalize_data(data_set, type), fit_data: []}
   end
 
   @doc """

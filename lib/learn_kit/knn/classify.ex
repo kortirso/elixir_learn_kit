@@ -31,7 +31,7 @@ defmodule LearnKit.Knn.Classify do
       defp check_normalization(data_set, options) do
         type = Keyword.get(options, :normalization)
         case type do
-          t when t in ["minimax", "z_normalization"] -> normalize(data_set, options, type)
+          t when t in ["minimax", "z_normalization"] -> normalize(data_set, type)
           _ -> data_set
         end
       end
@@ -72,7 +72,7 @@ defmodule LearnKit.Knn.Classify do
       end
 
       # normalize each feature
-      defp normalize(data_set, options, type) do
+      defp normalize(data_set, type) do
         coefficients = find_coefficients_for_normalization(data_set, type)
         Enum.map(data_set, fn {key, features} ->
           {
