@@ -2,6 +2,7 @@ defmodule LearnKit.NaiveBayes.Gaussian.Classify do
   @moduledoc """
   Module for prediction functions
   """
+
   defmacro __using__(_opts) do
     quote do
       # classify data

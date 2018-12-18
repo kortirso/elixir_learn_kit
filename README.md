@@ -2,6 +2,10 @@
 
 Elixir package for machine learning
 
+Available preprocessing methods:
+
+- Normalization
+
 Available algorithms for prediction:
 
 - Linear Regression
@@ -19,10 +23,40 @@ by adding `learn_kit` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:learn_kit, "~> 0.1.4"}
+    {:learn_kit, "~> 0.1.5"}
   ]
 end
 ```
+
+### Normalization
+
+Normalize data set with minimax normalization
+
+```elixir
+  alias LearnKit.Preprocessing
+  Preprocessing.normalize([[1, 2], [3, 4], [5, 6]])
+```
+
+Or normalize data set with selected type
+
+```elixir
+  Preprocessing.normalize([[1, 2], [3, 4], [5, 6]], [type: "z_normalization"])
+```
+  options - array of options
+
+Additionally you can prepare coefficients for normalization
+
+```elixir
+  Preprocessing.coefficients([[1, 2], [3, 4], [5, 6]], "minimax")
+```
+    type - method of normalization, one of the [minimax|z_normalization], required
+
+And then normalize 1 feature with predefined coefficients
+
+```elixir
+  Preprocessing.normalize_feature([1, 2], [{1, 5}, {2, 6}], "minimax")
+```
+    type - method of normalization, one of the [minimax|z_normalization], required
 
 ### Linear Regression
 
@@ -64,21 +98,23 @@ Initialize classifier with data set consists from labels and features:
 
 ```elixir
   alias LearnKit.Knn
-  classifier = Knn.new
-                  |> Knn.add_train_data({:a1, [-1, -1]})
-                  |> Knn.add_train_data({:a1, [-2, -1]})
-                  |> Knn.add_train_data({:a2, [1, 1]})
+  classifier =
+    Knn.new
+    |> Knn.add_train_data({:a1, [-1, -1]})
+    |> Knn.add_train_data({:a1, [-2, -1]})
+    |> Knn.add_train_data({:a2, [1, 1]})
 ```
 
 Predict label for new feature:
 
 ```elixir
-  Knn.classify(classifier, [feature: [-1, -2], k: 3, weight: "distance"])
+  Knn.classify(classifier, [feature: [-1, -2], k: 3, weight: "distance", normalization: "minimax"])
 ```
     feature - new feature for prediction, required
     k - number of nearest neighbors, optional, default - 3
     algorithm - algorithm for calculation of distances, one of the [brute], optional, default - "brute"
     weight - method of weighted neighbors, one of the [uniform|distance], optional, default - "uniform"
+    normalization - method of normalization, one of the [none|minimax|z_normalization], optional, default - "none"
 
 ### Gaussian Naive Bayes classification
 
@@ -86,11 +122,19 @@ Initialize classifier with data set consists from labels and features:
 
 ```elixir
   alias LearnKit.NaiveBayes.Gaussian
-  classifier = Gaussian.new
-                  |> Gaussian.add_train_data({:a1, [-1, -1]})
-                  |> Gaussian.add_train_data({:a1, [-2, -1]})
-                  |> Gaussian.add_train_data({:a2, [1, 1]})
+  classifier =
+    Gaussian.new
+    |> Gaussian.add_train_data({:a1, [-1, -1]})
+    |> Gaussian.add_train_data({:a1, [-2, -1]})
+    |> Gaussian.add_train_data({:a2, [1, 1]})
 ```
+
+Normalize data set:
+
+```elixir
+  classifier = classifier |> Gaussian.normalize_train_data("minimax")
+```
+    type - method of normalization, one of the [none|minimax|z_normalization], optional, default - "none"
 
 Fit data set:
 

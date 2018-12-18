@@ -4,16 +4,16 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   alias LearnKit.NaiveBayes.Gaussian
 
   setup_all do
-    {:ok, classificator: Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])}
+    {:ok, classifier: Gaussian.new([{:label1, [[-1, -1], [-2, -1], [-3, -2]]}, {:label2, [[1, 1], [2, 1], [3, 2], [-2, -2]]}])}
   end
 
-  test "create new knn classificator with empty data set" do
+  test "create new knn classifier with empty data set" do
     assert %Gaussian{data_set: data_set} = Gaussian.new
 
     assert data_set == []
   end
 
-  test "add train data to classificator" do
+  test "add train data to classifier" do
     %Gaussian{data_set: data_set} =
       Gaussian.new
       |> Gaussian.add_train_data({:a1, [1, 2]})
@@ -24,7 +24,7 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   end
 
   test "normalize data set", state do
-    %Gaussian{data_set: data_set} = state[:classificator] |> Gaussian.normalize_train_data("minimax")
+    %Gaussian{data_set: data_set} = state[:classifier] |> Gaussian.normalize_train_data("minimax")
 
     assert data_set ==
       [
@@ -34,7 +34,7 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   end
 
   test "fit data set", state do
-    %Gaussian{fit_data: fit_data} = state[:classificator] |> Gaussian.fit
+    %Gaussian{fit_data: fit_data} = state[:classifier] |> Gaussian.fit
 
     assert fit_data ==
       [
@@ -50,23 +50,23 @@ defmodule LearnKit.NaiveBayes.GaussianTest do
   end
 
   test "return probability estimates for the feature", state do
-    classificator = state[:classificator] |> Gaussian.fit
+    classifier = state[:classifier] |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> Gaussian.predict_proba([1, 2])
+    assert {:ok, result} = classifier |> Gaussian.predict_proba([1, 2])
     assert result == [label1: 0.0, label2: 0.017199571]
   end
 
   test "return exact prediction for the feature", state do
-    classificator = state[:classificator] |> Gaussian.fit
+    classifier = state[:classifier] |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> Gaussian.predict([1, 2])
+    assert {:ok, result} = classifier |> Gaussian.predict([1, 2])
     assert result == {:label2, 0.017199571}
   end
 
   test "returns the mean accuracy on the given test data and labels", state do
-    classificator = state[:classificator] |> Gaussian.fit
+    classifier = state[:classifier] |> Gaussian.fit
 
-    assert {:ok, result} = classificator |> Gaussian.score
+    assert {:ok, result} = classifier |> Gaussian.score
     assert result == 0.857143
   end
 end
