@@ -63,5 +63,13 @@ defmodule LearnKit.KnnTest do
     test "classify new feature, for existed point", state do
       assert {:ok, :b1} = Knn.classify(state[:classifier], [feature: [-2, -2], k: 3, weight: "uniform"])
     end
+
+    test "classify new feature, minimax normalization", state do
+      assert {:ok, :a1} = Knn.classify(state[:classifier], [feature: [-1, -2], k: 3, weight: "distance", normalization: "minimax"])
+    end
+
+    test "classify new feature, z normalization", state do
+      assert {:ok, :a1} = Knn.classify(state[:classifier], [feature: [-1, -2], k: 3, weight: "distance", normalization: "z_normalization"])
+    end
   end
 end

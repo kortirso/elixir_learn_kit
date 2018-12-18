@@ -18,6 +18,24 @@ defmodule LearnKit.PreprocessingTest do
   end
 
   describe "for valid data" do
+    test "prepare coefficients for normalization, minimax" do
+      result = Preprocessing.coefficients([[1, 2], [3, 4], [5, 6]], "minimax")
+
+      assert result == [{1, 5}, {2, 6}]
+    end
+
+    test "prepare coefficients for normalization, z_normalization" do
+      result = Preprocessing.coefficients([[1, 2], [3, 4], [5, 6]], "z_normalization")
+
+      assert result == [{3.0, 1.632993161855452}, {4.0, 1.632993161855452}]
+    end
+
+    test "normalize 1 feature with predefined coefficients" do
+      result = Preprocessing.normalize_feature([1, 2], [{1, 5}, {2, 6}], "minimax")
+
+      assert result == [0.0, 0.0]
+    end
+
     test "normalize data set with minimax normalization" do
       result = Preprocessing.normalize([[1, 2], [3, 4], [5, 6]])
 

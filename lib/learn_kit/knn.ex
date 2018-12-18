@@ -85,6 +85,7 @@ defmodule LearnKit.Knn do
     - k: number of nearest neighbours, default is 3, optional
     - algorithm: brute, optional
     - weight: uniform/distance, default is uniform, optional
+    - normalization: none/minimax/z_normalization, default is none, optional
 
   ## Examples
 
@@ -106,7 +107,7 @@ defmodule LearnKit.Knn do
         {:error, "K option must be positive integer"}
 
       true ->
-        options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform"], options)
+        options = Keyword.merge([k: 3, algorithm: "brute", weight: "uniform", normalization: "none"], options)
         {label, _} = prediction(data_set, options)
         {:ok, label}
     end

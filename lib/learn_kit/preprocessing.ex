@@ -3,7 +3,7 @@ defmodule LearnKit.Preprocessing do
   Module for data preprocessing
   """
 
-  alias LearnKit.Preprocessing
+  alias LearnKit.{Preprocessing, Math}
 
   use Preprocessing.Normalize
 
@@ -63,5 +63,58 @@ defmodule LearnKit.Preprocessing do
       "z_normalization" -> normalization(features, "z_normalization")
       _ -> normalization(features, "minimax")
     end
+  end
+
+  @doc """
+  Prepare coefficients for normalization
+
+  ## Parameters
+
+    - features: features grouped by index
+    - type: minimax/z_normalization
+
+  ## Examples
+
+      iex> LearnKit.Preprocessing.coefficients([[1, 2], [3, 4], [5, 6]], "minimax")
+      [{1, 5}, {2, 6}]
+
+      iex> LearnKit.Preprocessing.coefficients([[1, 2], [3, 4], [5, 6]], "z_normalization")
+      [{3.0, 1.632993161855452}, {4.0, 1.632993161855452}]
+
+  """
+  @spec coefficients(matrix, String.t()) :: matrix
+
+  def coefficients(features, type) when is_list(features) and is_binary(type) do
+    features
+    |> Math.transpose()
+    |> Enum.map(fn list -> return_params(list, type) end)
+  end
+
+  @doc """
+  Normalize 1 feature with predefined coefficients
+
+  ## Parameters
+
+    - feature: feature for normalization
+    - coefficients: predefined coefficients
+    - type: minimax/z_normalization
+
+  ## Examples
+
+      iex> LearnKit.Preprocessing.normalize_feature([1, 2], [{1, 5}, {2, 6}], "minimax")
+      [0.0, 0.0]
+
+  """
+  @spec normalize_feature(list, list(tuple), String.t()) :: list
+
+  def normalize_feature(feature, coefficients, type) when is_list(feature) and is_list(coefficients) and is_binary(type) do
+    Enum.zip(feature, coefficients)
+    |> Enum.map(fn {point, params_for_point} ->
+      divider = define_divider(params_for_point, type)
+      case divider do
+        0 -> point
+        _ -> (point - elem(params_for_point, 0)) / divider
+      end
+    end)
   end
 end

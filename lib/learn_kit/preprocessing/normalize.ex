@@ -8,9 +8,9 @@ defmodule LearnKit.Preprocessing.Normalize do
   defmacro __using__(_opts) do
     quote do
       defp normalization(features, type) do
-        features_by_index = Math.transpose(features)
-        list_of_params = Enum.map(features_by_index, fn list -> return_params(list, type) end)
-        features_by_index
+        list_of_params = coefficients(features, type)
+        features
+        |> Math.transpose()
         |> Enum.with_index()
         |> Enum.map(fn {feature, index} -> transform_feature(feature, Enum.at(list_of_params, index), type) end)
         |> Math.transpose()

@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - preprocessing normalization for data set
 
+### Modified
+- normalization can be selected for KNN
+
 ## [0.1.4] - 2018-12-17
 ### Modified
 - errors conditions and tests for KNN

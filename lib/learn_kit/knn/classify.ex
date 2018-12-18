@@ -3,16 +3,37 @@ defmodule LearnKit.Knn.Classify do
   Module for knn classify functions
   """
 
-  alias LearnKit.Math
+  alias LearnKit.{Preprocessing, Math}
 
   defmacro __using__(_opts) do
     quote do
       defp prediction(data_set, options) do
         data_set
+        |> filter_features_by_size(Keyword.get(options, :feature))
+        |> check_normalization(options)
         |> calc_distances_for_features(options)
         |> sort_distances()
         |> select_closest_features(options)
         |> check_zero_distance(options)
+      end
+
+      # knn uses only features with the same size as current feature
+      defp filter_features_by_size(data_set, current_feature) do
+        Enum.map(data_set, fn {key, features} ->
+          {
+            key,
+            Enum.filter(features, fn feature -> length(feature) == length(current_feature) end)
+          }
+        end)
+      end
+
+      # normalize features
+      defp check_normalization(data_set, options) do
+        type = Keyword.get(options, :normalization)
+        case type do
+          t when t in ["minimax", "z_normalization"] -> normalize(data_set, options, type)
+          _ -> data_set
+        end
       end
 
       # select algorithm for prediction
@@ -23,14 +44,17 @@ defmodule LearnKit.Knn.Classify do
         end
       end
 
+      # sort distances
       defp sort_distances(features) do
         Enum.sort(features, &(elem(&1, 0) <= elem(&2, 0)))
       end
 
+      # take closest features
       defp select_closest_features(features, options) do
         Enum.take(features, Keyword.get(options, :k))
       end
 
+      # check existeness of current feature in data set
       defp check_zero_distance(closest_features, options) do
         {distance, label} = Enum.at(closest_features, 0)
         cond do
@@ -39,11 +63,31 @@ defmodule LearnKit.Knn.Classify do
         end
       end
 
+      # select best result based on weights
       defp select_best_label(features, options) do
         features
         |> calc_feature_weights(options)
         |> accumulate_weight_of_labels([])
         |> sort_result()
+      end
+
+      # normalize each feature
+      defp normalize(data_set, options, type) do
+        coefficients = find_coefficients_for_normalization(data_set, type)
+        Enum.map(data_set, fn {key, features} ->
+          {
+            key,
+            Enum.map(features, fn feature -> Preprocessing.normalize_feature(feature, coefficients, type) end)
+          }
+        end)
+      end
+
+      # find coefficients for normalization
+      defp find_coefficients_for_normalization(data_set, type) do
+        Enum.reduce(data_set, [], fn {_, features}, acc ->
+          Enum.reduce(features, acc, fn feature, acc -> [feature | acc] end)
+        end)
+        |> Preprocessing.coefficients(type)
       end
 
       defp calc_feature_weights(features, options) do
@@ -70,14 +114,7 @@ defmodule LearnKit.Knn.Classify do
         Enum.map(keys, fn key ->
           data_set
           |> Keyword.get(key)
-          |> filter_features_by_size(current_feature)
           |> calc_distances_in_label(current_feature, key)
-        end)
-      end
-
-      defp filter_features_by_size(features, current_feature) do
-        Enum.filter(features, fn feature ->
-          length(feature) == length(current_feature)
         end)
       end
 
