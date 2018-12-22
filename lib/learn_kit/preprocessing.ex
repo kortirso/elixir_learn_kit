@@ -29,9 +29,7 @@ defmodule LearnKit.Preprocessing do
   """
   @spec normalize(matrix) :: matrix
 
-  def normalize(features) when is_list(features) do
-    normalize(features, [type: "minimax"])
-  end
+  def normalize(features) when is_list(features), do: normalize(features, [type: "minimax"])
 
   @doc """
   Normalize data set
@@ -59,7 +57,7 @@ defmodule LearnKit.Preprocessing do
 
   def normalize(features, options) when is_list(features) and is_list(options) do
     options = Keyword.merge([type: "minimax"], options)
-    case Keyword.get(options, :type) do
+    case options[:type] do
       "z_normalization" -> normalization(features, "z_normalization")
       _ -> normalization(features, "minimax")
     end

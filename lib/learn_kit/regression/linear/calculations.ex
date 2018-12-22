@@ -7,11 +7,11 @@ defmodule LearnKit.Regression.Linear.Calculations do
 
   defmacro __using__(_opts) do
     quote do
-      defp fit_data(method, factors, results) when method == "gradient descent" do
+      defp do_fit(method, factors, results) when method == "gradient descent" do
         gradient_descent_iteration([:rand.uniform, :rand.uniform], 0.0001, nil, 1000000, Enum.zip(factors, results), 0)
       end
 
-      defp fit_data(_, factors, results) do
+      defp do_fit(_, factors, results) do
         beta = Math.correlation(factors, results) * Math.standard_deviation(results) / Math.standard_deviation(factors)
         alpha = Math.mean(results) - beta * Math.mean(factors)
         [alpha, beta]

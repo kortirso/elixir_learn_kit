@@ -24,9 +24,7 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec new() :: %Linear{factors: [], results: [], coefficients: []}
 
-  def new do
-    Linear.new([], [])
-  end
+  def new, do: Linear.new([], [])
 
   @doc """
   Creates predictor with data_set
@@ -44,9 +42,7 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec new(factors, results) :: %Linear{factors: factors, results: results, coefficients: []}
 
-  def new(factors, results) do
-    %Linear{factors: factors, results: results}
-  end
+  def new(factors, results) when is_list(factors) and is_list(results), do: %Linear{factors: factors, results: results}
 
   @doc """
   Fit train data
@@ -79,16 +75,16 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
 
-  def fit(%Linear{factors: factors, results: results}, options \\ []) do
+  def fit(%Linear{factors: factors, results: results}, options \\ []) when is_list(options) do
     coefficients =
       Keyword.merge([method: ""], options)
       |> define_method_for_fit()
-      |> fit_data(factors, results)
+      |> do_fit(factors, results)
     %Linear{factors: factors, results: results, coefficients: coefficients}
   end
 
   defp define_method_for_fit(options) do
-    case Keyword.get(options, :method) do
+    case options[:method] do
       "gradient descent" -> "gradient descent"
       _ -> ""
     end
@@ -110,9 +106,11 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
-  def predict(%Linear{coefficients: coefficients}, samples) do
-    result = Enum.map(samples, fn sample -> predict_sample(sample, coefficients) end)
-    {:ok, result}
+  def predict(%Linear{coefficients: coefficients}, samples) when is_list(samples) do
+    {
+      :ok,
+      Enum.map(samples, fn sample -> predict_sample(sample, coefficients) end)
+    }
   end
 
   @doc """
@@ -131,6 +129,9 @@ defmodule LearnKit.Regression.Linear do
   @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
 
   def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
-    {:ok, calculate_score(coefficients, factors, results)}
+    {
+      :ok,
+      calculate_score(coefficients, factors, results)
+    }
   end
 end

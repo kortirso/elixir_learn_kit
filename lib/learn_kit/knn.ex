@@ -26,9 +26,7 @@ defmodule LearnKit.Knn do
   """
   @spec new() :: %Knn{data_set: []}
 
-  def new do
-    Knn.new([])
-  end
+  def new, do: Knn.new([])
 
   @doc """
   Creates classifier with data_set
@@ -45,9 +43,7 @@ defmodule LearnKit.Knn do
   """
   @spec new(data_set) :: %Knn{data_set: data_set}
 
-  def new(data_set) when is_list(data_set) do
-    %Knn{data_set: data_set}
-  end
+  def new(data_set) when is_list(data_set), do: %Knn{data_set: data_set}
 
   @doc """
   Add train data to classifier
@@ -66,7 +62,7 @@ defmodule LearnKit.Knn do
   @spec add_train_data(%Knn{data_set: data_set}, point) :: %Knn{data_set: data_set}
 
   def add_train_data(%Knn{data_set: data_set}, {key, value}) when is_atom(key) and is_list(value) do
-    features = if Keyword.has_key?(data_set, key), do: Keyword.get(data_set, key), else: []
+    features = if Keyword.has_key?(data_set, key), do: data_set[key], else: []
     data_set = Keyword.put(data_set, key, [value | features])
     %Knn{data_set: data_set}
   end
@@ -100,10 +96,10 @@ defmodule LearnKit.Knn do
       !Keyword.has_key?(options, :feature) ->
         {:error, "Feature option is required"}
 
-      !is_list(Keyword.get(options, :feature)) ->
+      !is_list(options[:feature]) ->
         {:error, "Feature option must be presented as array"}
 
-      Keyword.has_key?(options, :k) && (!is_integer(Keyword.get(options, :k)) || Keyword.get(options, :k) <= 0) ->
+      Keyword.has_key?(options, :k) && (!is_integer(options[:k]) || options[:k] <= 0) ->
         {:error, "K option must be positive integer"}
 
       true ->

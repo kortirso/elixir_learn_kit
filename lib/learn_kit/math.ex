@@ -17,9 +17,20 @@ defmodule LearnKit.Math do
   """
   @spec summ(number, number) :: number
 
-  def summ(a, b) do
-    a + b
-  end
+  def summ(a, b), do: a + b
+
+  @doc """
+  Division for 2 elements
+
+  ## Examples
+
+      iex> LearnKit.Math.division(10, 2)
+      5.0
+
+  """
+  @spec division(number, number) :: number
+
+  def division(x, y) when y != 0, do: x / y
 
   @doc """
   Calculate the mean from a list of numbers
@@ -35,14 +46,14 @@ defmodule LearnKit.Math do
   """
   @spec mean(list) :: number
 
-  def mean(list) when is_list(list), do: mean(list, 0, 0)
+  def mean(list) when is_list(list), do: do_mean(list, 0, 0)
 
-  defp mean([], 0, 0), do: nil
+  defp do_mean([], 0, 0), do: nil
 
-  defp mean([], sum, number), do: sum / number
+  defp do_mean([], sum, number), do: sum / number
 
-  defp mean([head | tail], sum, number) do
-    mean(tail, sum + head, number + 1)
+  defp do_mean([head | tail], sum, number) do
+    do_mean(tail, sum + head, number + 1)
   end
 
   @doc """
@@ -131,16 +142,14 @@ defmodule LearnKit.Math do
   """
   @spec transpose(matrix) :: matrix
 
-  def transpose(m) do
-    swap_rows_cols(m)
-  end
+  def transpose(m), do: do_transpose(m)
 
-  defp swap_rows_cols([head | _]) when head == [], do: []
+  defp do_transpose([head | _]) when head == [], do: []
 
-  defp swap_rows_cols(rows) do
+  defp do_transpose(rows) do
     firsts = Enum.map(rows, fn x -> hd(x) end)
     others = Enum.map(rows, fn x -> tl(x) end)
-    [firsts | swap_rows_cols(others)]
+    [firsts | do_transpose(others)]
   end
 
   @doc """
@@ -169,24 +178,9 @@ defmodule LearnKit.Math do
   """
   @spec vector_subtraction(list, list) :: list
 
-  def vector_subtraction(x, y) when is_list(x) and is_list(y) and length(x) == length(y) do
+  def vector_subtraction(x, y) when length(x) == length(y) do
     Enum.zip(x, y)
     |> Enum.map(fn {xi, yi} -> xi - yi end)
-  end
-
-  @doc """
-  Division for 2 elements
-
-  ## Examples
-
-      iex> LearnKit.Math.division(10, 2)
-      5.0
-
-  """
-  @spec division(number, number) :: number
-
-  def division(x, y) when y != 0 do
-    x / y
   end
 
   @doc """
