@@ -8,6 +8,7 @@ defmodule LearnKit.Regression.Linear do
   alias LearnKit.Regression.Linear
 
   use Linear.Calculations
+  use LearnKit.Regression.Score
 
   @type factors :: [number]
   @type results :: [number]
@@ -42,7 +43,8 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec new(factors, results) :: %Linear{factors: factors, results: results, coefficients: []}
 
-  def new(factors, results) when is_list(factors) and is_list(results), do: %Linear{factors: factors, results: results}
+  def new(factors, results) when is_list(factors) and is_list(results),
+    do: %Linear{factors: factors, results: results}
 
   @doc """
   Fit train data
@@ -73,13 +75,19 @@ defmodule LearnKit.Regression.Linear do
       }
 
   """
-  @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
+  @spec fit(%Linear{factors: factors, results: results}) :: %Linear{
+          factors: factors,
+          results: results,
+          coefficients: coefficients
+        }
 
-  def fit(%Linear{factors: factors, results: results}, options \\ []) when is_list(options) do
+  def fit(linear = %Linear{factors: factors, results: results}, options \\ [])
+      when is_list(options) do
     coefficients =
       Keyword.merge([method: ""], options)
       |> define_method_for_fit()
-      |> do_fit(factors, results)
+      |> do_fit(linear)
+
     %Linear{factors: factors, results: results, coefficients: coefficients}
   end
 
@@ -106,32 +114,30 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
-  def predict(%Linear{coefficients: coefficients}, samples) when is_list(samples) do
+  def predict(linear = %Linear{coefficients: _}, samples) when is_list(samples) do
     {
       :ok,
-      Enum.map(samples, fn sample -> predict_sample(sample, coefficients) end)
+      do_predict(linear, samples)
     }
   end
 
   @doc """
-  Returns the coefficient of determination R^2 of the prediction
+  Predict using the linear model
 
   ## Parameters
 
     - predictor: %LearnKit.Regression.Linear{}
+    - sample: Sample variable
 
   ## Examples
 
-      iex> predictor |> LearnKit.Regression.Linear.score
-      {:ok, 0.9876543209876543}
+      iex> predictor |> LearnKit.Regression.Linear.predict(4)
+      {:ok, 14.5}
 
   """
-  @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
+  @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
-  def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
-    {
-      :ok,
-      calculate_score(coefficients, factors, results)
-    }
+  def predict(%Linear{coefficients: [alpha, beta]}, sample) do
+    {:ok, sample * beta + alpha}
   end
 end

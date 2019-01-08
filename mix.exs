@@ -27,7 +27,8 @@ defmodule LearnKit.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.19", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev},
+      {:matrix, "~> 0.3.2"}
     ]
   end
 
