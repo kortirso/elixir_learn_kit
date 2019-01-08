@@ -6,7 +6,6 @@ defmodule LearnKit.Regression.Polynomial do
   defstruct factors: [], results: [], coefficients: [], degree: 2
 
   alias LearnKit.Regression.Polynomial
-
   use Polynomial.Calculations
   use LearnKit.Regression.Score
 
@@ -29,12 +28,8 @@ defmodule LearnKit.Regression.Polynomial do
       %LearnKit.Regression.Polynomial{factors: [1, 2, 3, 4], results: [3, 6, 10, 15], coefficients: [], degree: 2}
 
   """
-  @spec new(factors, results) :: %Polynomial{
-          factors: factors,
-          results: results,
-          coefficients: [],
-          degree: 2
-        }
+  @spec new(factors, results) :: %Polynomial{factors: factors, results: results, coefficients: [], degree: 2}
+
   def new(factors, results) when is_list(factors) and is_list(results) do
     %Polynomial{factors: factors, results: results}
   end
@@ -74,12 +69,8 @@ defmodule LearnKit.Regression.Polynomial do
       }
 
   """
-  @spec fit(%Polynomial{factors: factors, results: results}) :: %Polynomial{
-          factors: factors,
-          results: results,
-          coefficients: coefficients,
-          degree: degree
-        }
+  @spec fit(%Polynomial{factors: factors, results: results}) :: %Polynomial{factors: factors, results: results, coefficients: coefficients, degree: degree}
+
   def fit(%Polynomial{factors: factors, results: results}, options \\ []) do
     degree = options[:degree] || 2
     matrix = matrix(factors, degree)
@@ -103,8 +94,8 @@ defmodule LearnKit.Regression.Polynomial do
 
   """
   @spec predict(%Polynomial{coefficients: coefficients, degree: degree}, list) :: {:ok, list}
-  def predict(polynomial = %Polynomial{coefficients: _, degree: _}, samples)
-      when is_list(samples) do
+
+  def predict(polynomial = %Polynomial{coefficients: _, degree: _}, samples) when is_list(samples) do
     {:ok, do_predict(polynomial, samples)}
   end
 
@@ -123,6 +114,7 @@ defmodule LearnKit.Regression.Polynomial do
 
   """
   @spec predict(%Polynomial{coefficients: coefficients, degree: degree}, number) :: {:ok, number}
+
   def predict(%Polynomial{coefficients: coefficients, degree: degree}, sample) do
     ordered_coefficients = coefficients |> Enum.reverse()
     {:ok, substitute_coefficients(ordered_coefficients, sample, degree, 0.0)}

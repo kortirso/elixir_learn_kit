@@ -14,7 +14,6 @@ defmodule LearnKit.Regression.Polynomial.Calculations do
 
       defp matrix_line(1, factors, degree) do
         power_ofs = Enum.to_list(1..degree)
-
         [Enum.count(factors) | sum_of_x_i_with_k(power_ofs, factors)]
       end
 
@@ -26,7 +25,6 @@ defmodule LearnKit.Regression.Polynomial.Calculations do
 
       defp matrix(factors, degree) do
         lines = Enum.to_list(1..(degree + 1))
-
         Enum.map(lines, fn line ->
           matrix_line(line, factors, degree)
         end)

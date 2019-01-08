@@ -4,7 +4,6 @@ defmodule LearnKit.Preprocessing do
   """
 
   alias LearnKit.{Preprocessing, Math}
-
   use Preprocessing.Normalize
 
   @type row :: [number]

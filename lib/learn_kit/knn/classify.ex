@@ -45,14 +45,10 @@ defmodule LearnKit.Knn.Classify do
       end
 
       # sort distances
-      defp sort_distances(features) do
-        Enum.sort(features, &(elem(&1, 0) <= elem(&2, 0)))
-      end
+      defp sort_distances(features), do: Enum.sort(features, &(elem(&1, 0) <= elem(&2, 0)))
 
       # take closest features
-      defp select_closest_features(features, options) do
-        Enum.take(features, options[:k])
-      end
+      defp select_closest_features(features, options), do: Enum.take(features, options[:k])
 
       # check existeness of current feature in data set
       defp check_zero_distance(closest_features, options) do
@@ -146,9 +142,7 @@ defmodule LearnKit.Knn.Classify do
         end
       end
 
-      defp accumulate_weight_of_labels([], acc) do
-        acc
-      end
+      defp accumulate_weight_of_labels([], acc), do: acc
 
       defp accumulate_weight_of_labels([{_, key, weight} | tail], acc) do
         previous = if Keyword.has_key?(acc, key), do: acc[key], else: 0

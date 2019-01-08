@@ -6,7 +6,6 @@ defmodule LearnKit.Knn do
   defstruct data_set: []
 
   alias LearnKit.Knn
-
   use Knn.Classify
 
   @type label :: atom

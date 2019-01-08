@@ -1,6 +1,5 @@
 defmodule LearnKit.Regression.LinearTest do
   use ExUnit.Case
-
   alias LearnKit.Regression.Linear
 
   setup_all do

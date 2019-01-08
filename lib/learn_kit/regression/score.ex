@@ -20,11 +20,7 @@ defmodule LearnKit.Regression.Score do
           {:ok, 0.9876543209876543}
 
       """
-      @spec score(%LearnKit.Regression.Linear{
-              factors: factors,
-              results: results,
-              coefficients: coefficients
-            }) :: {:ok, number}
+      @spec score(%LearnKit.Regression.Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
 
       def score(regression = %_{factors: _, results: _, coefficients: _}) do
         {
@@ -44,10 +40,9 @@ defmodule LearnKit.Regression.Score do
         y - prediction
       end
 
-      defp sum_of_squared_errors(
-             regression = %_{coefficients: _, factors: factors, results: results}
-           ) do
-        Enum.zip(factors, results)
+      defp sum_of_squared_errors(regression = %_{coefficients: _, factors: factors, results: results}) do
+        factors
+        |> Enum.zip(results)
         |> Enum.reduce(0, fn {xi, yi}, acc ->
           acc + squared_prediction_error(regression, xi, yi)
         end)

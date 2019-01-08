@@ -9,6 +9,7 @@ Available preprocessing methods:
 Available algorithms for prediction:
 
 - Linear Regression
+- Polynomial Regression
 
 Available algorithms for classification:
 
@@ -23,7 +24,7 @@ by adding `learn_kit` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:learn_kit, "~> 0.1.5"}
+    {:learn_kit, "~> 0.1.6"}
   ]
 end
 ```

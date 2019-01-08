@@ -1,6 +1,5 @@
 defmodule LearnKit.KnnTest do
   use ExUnit.Case
-
   alias LearnKit.Knn
 
   setup_all do

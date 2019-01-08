@@ -6,7 +6,6 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   defstruct data_set: [], fit_data: []
 
   alias LearnKit.NaiveBayes.Gaussian
-
   use Gaussian.Normalize
   use Gaussian.Fit
   use Gaussian.Classify
@@ -34,9 +33,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   """
   @spec new() :: %Gaussian{data_set: []}
 
-  def new do
-    Gaussian.new([])
-  end
+  def new, do: Gaussian.new([])
 
   @doc """
   Creates classifier with data_set
@@ -53,9 +50,7 @@ defmodule LearnKit.NaiveBayes.Gaussian do
   """
   @spec new(data_set) :: %Gaussian{data_set: data_set}
 
-  def new(data_set) do
-    %Gaussian{data_set: data_set}
-  end
+  def new(data_set), do: %Gaussian{data_set: data_set}
 
   @doc """
   Add train data to classifier

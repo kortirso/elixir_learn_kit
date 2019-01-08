@@ -1,6 +1,5 @@
 defmodule LearnKit.MathTest do
   use ExUnit.Case
-
   alias LearnKit.Math
 
   test "calculate sum" do

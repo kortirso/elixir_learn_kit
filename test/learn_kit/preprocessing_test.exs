@@ -1,6 +1,5 @@
 defmodule LearnKit.PreprocessingTest do
   use ExUnit.Case
-
   alias LearnKit.Preprocessing
 
   describe "for invalid data" do
