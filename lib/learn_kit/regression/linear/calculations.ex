@@ -29,6 +29,13 @@ defmodule LearnKit.Regression.Linear.Calculations do
         [alpha, beta]
       end
 
+      defp do_predict(linear, samples) do
+        Enum.map(samples, fn sample ->
+          {:ok, prediction} = predict(linear, sample)
+          prediction
+        end)
+      end
+
       defp squared_error_gradient(linear, x, y) do
         error_variable = prediction_error(linear, x, y)
 

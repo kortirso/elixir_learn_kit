@@ -6,7 +6,9 @@ defmodule LearnKit.Regression.Polynomial do
   defstruct factors: [], results: [], coefficients: [], degree: 2
 
   alias LearnKit.Regression.Polynomial
+
   use Polynomial.Calculations
+  use LearnKit.Regression.Score
 
   @type factors :: [number]
   @type results :: [number]

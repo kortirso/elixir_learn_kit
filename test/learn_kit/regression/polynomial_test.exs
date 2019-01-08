@@ -59,4 +59,11 @@ defmodule LearnKit.Regression.PolynomialTest do
            |> Polynomial.fit(degree: 2)
            |> Polynomial.predict([3, 5]) == {:ok, [-0.009459989001544572, 0.10916263554608596]}
   end
+
+  test "returns coefficient of determination R^2 of the prediction", state do
+    predictor = state.predictor |> Polynomial.fit()
+
+    assert {:ok, result} = predictor |> Polynomial.score()
+    assert result == 0.9614116660464942
+  end
 end

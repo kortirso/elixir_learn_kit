@@ -117,7 +117,7 @@ defmodule LearnKit.Regression.Linear do
   def predict(linear = %Linear{coefficients: _}, samples) when is_list(samples) do
     {
       :ok,
-      Enum.map(samples, fn sample -> predict(linear, sample) end)
+      do_predict(linear, samples)
     }
   end
 
@@ -138,29 +138,6 @@ defmodule LearnKit.Regression.Linear do
   @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
   def predict(%Linear{coefficients: [alpha, beta]}, sample) do
-    sample * beta + alpha
-  end
-
-  @doc """
-  Returns the coefficient of determination R^2 of the prediction
-
-  ## Parameters
-
-    - predictor: %LearnKit.Regression.Linear{}
-
-  ## Examples
-
-      iex> predictor |> LearnKit.Regression.Linear.score
-      {:ok, 0.9876543209876543}
-
-  """
-  @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) ::
-          {:ok, number}
-
-  def score(linear = %Linear{factors: _, results: _, coefficients: _}) do
-    {
-      :ok,
-      calculate_score(linear)
-    }
+    {:ok, sample * beta + alpha}
   end
 end

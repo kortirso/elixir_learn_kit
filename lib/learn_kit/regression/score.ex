@@ -1,12 +1,38 @@
 defmodule LearnKit.Regression.Score do
   @moduledoc """
-  Module for fit functions
+  Module for scoring regression models
   """
 
   alias LearnKit.Math
 
   defmacro __using__(_opts) do
     quote do
+      @doc """
+      Returns the coefficient of determination R^2 of the prediction
+
+      ## Parameters
+
+        - predictor: %LearnKit.Regression.Linear{}
+
+      ## Examples
+
+          iex> predictor |> LearnKit.Regression.Linear.score
+          {:ok, 0.9876543209876543}
+
+      """
+      @spec score(%LearnKit.Regression.Linear{
+              factors: factors,
+              results: results,
+              coefficients: coefficients
+            }) :: {:ok, number}
+
+      def score(regression = %_{factors: _, results: _, coefficients: _}) do
+        {
+          :ok,
+          calculate_score(regression)
+        }
+      end
+
       defp calculate_score(%_{coefficients: []}, _, _), do: raise("There was no fit for model")
 
       defp calculate_score(regression = %_{coefficients: _, factors: _, results: results}) do
@@ -14,7 +40,8 @@ defmodule LearnKit.Regression.Score do
       end
 
       defp prediction_error(regression, x, y) do
-        y - predict(regression, x)
+        {:ok, prediction} = predict(regression, x)
+        y - prediction
       end
 
       defp sum_of_squared_errors(
