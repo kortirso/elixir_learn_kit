@@ -8,11 +8,21 @@ defmodule LearnKit.Regression.Linear.Calculations do
   defmacro __using__(_opts) do
     quote do
       defp do_fit(method, factors, results) when method == "gradient descent" do
-        gradient_descent_iteration([:rand.uniform, :rand.uniform], 0.0001, nil, 1000000, Enum.zip(factors, results), 0)
+        gradient_descent_iteration(
+          [:rand.uniform(), :rand.uniform()],
+          0.0001,
+          nil,
+          1_000_000,
+          Enum.zip(factors, results),
+          0
+        )
       end
 
       defp do_fit(_, factors, results) do
-        beta = Math.correlation(factors, results) * Math.standard_deviation(results) / Math.standard_deviation(factors)
+        beta =
+          Math.correlation(factors, results) * Math.standard_deviation(results) /
+            Math.standard_deviation(factors)
+
         alpha = Math.mean(results) - beta * Math.mean(factors)
         [alpha, beta]
       end
@@ -24,7 +34,8 @@ defmodule LearnKit.Regression.Linear.Calculations do
       defp calculate_score([], _, _), do: raise("There was no fit for model")
 
       defp calculate_score(coefficients, factors, results) do
-        1.0 - sum_of_squared_errors(coefficients, factors, results) / total_sum_of_squares(results)
+        1.0 -
+          sum_of_squared_errors(coefficients, factors, results) / total_sum_of_squares(results)
       end
 
       defp total_sum_of_squares(list) do
@@ -34,7 +45,9 @@ defmodule LearnKit.Regression.Linear.Calculations do
 
       defp sum_of_squared_errors(coefficients, factors, results) do
         Enum.zip(factors, results)
-        |> Enum.reduce(0, fn {xi, yi}, acc -> acc + squared_prediction_error(coefficients, xi, yi) end)
+        |> Enum.reduce(0, fn {xi, yi}, acc ->
+          acc + squared_prediction_error(coefficients, xi, yi)
+        end)
       end
 
       defp squared_prediction_error(coefficients, x, y) do
@@ -45,6 +58,7 @@ defmodule LearnKit.Regression.Linear.Calculations do
 
       defp squared_error_gradient(coefficients, x, y) do
         error_variable = prediction_error(coefficients, x, y)
+
         [
           -2 * error_variable,
           -2 * error_variable * x
@@ -55,9 +69,18 @@ defmodule LearnKit.Regression.Linear.Calculations do
         y - predict_sample(x, coefficients)
       end
 
-      defp gradient_descent_iteration(_, _, min_theta, _, _, iterations_with_no_improvement) when iterations_with_no_improvement >= 100, do: min_theta
+      defp gradient_descent_iteration(_, _, min_theta, _, _, iterations_with_no_improvement)
+           when iterations_with_no_improvement >= 100,
+           do: min_theta
 
-      defp gradient_descent_iteration(theta, alpha, min_theta, min_value, data, iterations_with_no_improvement) do
+      defp gradient_descent_iteration(
+             theta,
+             alpha,
+             min_theta,
+             min_value,
+             data,
+             iterations_with_no_improvement
+           ) do
         [
           min_theta,
           min_value,
@@ -72,11 +95,23 @@ defmodule LearnKit.Regression.Linear.Calculations do
             gradient_i = squared_error_gradient(acc, xi, yi)
             acc |> Math.vector_subtraction(alpha |> Math.scalar_multiply(gradient_i))
           end)
-        gradient_descent_iteration(theta, alpha, min_theta, min_value, data, iterations_with_no_improvement)
+
+        gradient_descent_iteration(
+          theta,
+          alpha,
+          min_theta,
+          min_value,
+          data,
+          iterations_with_no_improvement
+        )
       end
 
       defp check_value(data, min_value, theta, min_theta, iterations_with_no_improvement, alpha) do
-        value = Enum.reduce(data, 0, fn {xi, yi}, acc -> acc + squared_prediction_error(theta, xi, yi) end)
+        value =
+          Enum.reduce(data, 0, fn {xi, yi}, acc ->
+            acc + squared_prediction_error(theta, xi, yi)
+          end)
+
         cond do
           value < min_value ->
             [theta, value, 0, 0.0001]

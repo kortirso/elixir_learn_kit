@@ -42,7 +42,8 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec new(factors, results) :: %Linear{factors: factors, results: results, coefficients: []}
 
-  def new(factors, results) when is_list(factors) and is_list(results), do: %Linear{factors: factors, results: results}
+  def new(factors, results) when is_list(factors) and is_list(results),
+    do: %Linear{factors: factors, results: results}
 
   @doc """
   Fit train data
@@ -73,13 +74,18 @@ defmodule LearnKit.Regression.Linear do
       }
 
   """
-  @spec fit(%Linear{factors: factors, results: results}) :: %Linear{factors: factors, results: results, coefficients: coefficients}
+  @spec fit(%Linear{factors: factors, results: results}) :: %Linear{
+          factors: factors,
+          results: results,
+          coefficients: coefficients
+        }
 
   def fit(%Linear{factors: factors, results: results}, options \\ []) when is_list(options) do
     coefficients =
       Keyword.merge([method: ""], options)
       |> define_method_for_fit()
       |> do_fit(factors, results)
+
     %Linear{factors: factors, results: results, coefficients: coefficients}
   end
 
@@ -126,7 +132,8 @@ defmodule LearnKit.Regression.Linear do
       {:ok, 0.9876543209876543}
 
   """
-  @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) :: {:ok, number}
+  @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) ::
+          {:ok, number}
 
   def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
     {
