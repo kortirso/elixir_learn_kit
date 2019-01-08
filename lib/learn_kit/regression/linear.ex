@@ -8,6 +8,7 @@ defmodule LearnKit.Regression.Linear do
   alias LearnKit.Regression.Linear
 
   use Linear.Calculations
+  use LearnKit.Regression.Score
 
   @type factors :: [number]
   @type results :: [number]
@@ -80,11 +81,12 @@ defmodule LearnKit.Regression.Linear do
           coefficients: coefficients
         }
 
-  def fit(%Linear{factors: factors, results: results}, options \\ []) when is_list(options) do
+  def fit(linear = %Linear{factors: factors, results: results}, options \\ [])
+      when is_list(options) do
     coefficients =
       Keyword.merge([method: ""], options)
       |> define_method_for_fit()
-      |> do_fit(factors, results)
+      |> do_fit(linear)
 
     %Linear{factors: factors, results: results, coefficients: coefficients}
   end
@@ -112,11 +114,31 @@ defmodule LearnKit.Regression.Linear do
   """
   @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
 
-  def predict(%Linear{coefficients: coefficients}, samples) when is_list(samples) do
+  def predict(linear = %Linear{coefficients: _}, samples) when is_list(samples) do
     {
       :ok,
-      Enum.map(samples, fn sample -> predict_sample(sample, coefficients) end)
+      Enum.map(samples, fn sample -> predict(linear, sample) end)
     }
+  end
+
+  @doc """
+  Predict using the linear model
+
+  ## Parameters
+
+    - predictor: %LearnKit.Regression.Linear{}
+    - sample: Sample variable
+
+  ## Examples
+
+      iex> predictor |> LearnKit.Regression.Linear.predict(4)
+      {:ok, 14.5}
+
+  """
+  @spec predict(%Linear{coefficients: coefficients}, list) :: {:ok, list}
+
+  def predict(%Linear{coefficients: [alpha, beta]}, sample) do
+    sample * beta + alpha
   end
 
   @doc """
@@ -135,10 +157,10 @@ defmodule LearnKit.Regression.Linear do
   @spec score(%Linear{factors: factors, results: results, coefficients: coefficients}) ::
           {:ok, number}
 
-  def score(%Linear{factors: factors, results: results, coefficients: coefficients}) do
+  def score(linear = %Linear{factors: _, results: _, coefficients: _}) do
     {
       :ok,
-      calculate_score(coefficients, factors, results)
+      calculate_score(linear)
     }
   end
 end
